@@ -1,5 +1,5 @@
-import json
 import argparse
+import json
 from pathlib import Path
 
 
@@ -9,32 +9,32 @@ def _load_schema(path: str) -> dict:
 
 def _all_class_names(schema: dict) -> set[str]:
     """Every class that becomes a handle on the wire."""
-    return set(schema["classes"].keys()) | set(schema["abstract_bases"].keys())
+    return set(schema['classes'].keys()) | set(schema['abstract_bases'].keys())
 
 
 def _is_handle_param(param: dict, handle_classes: set[str]) -> bool:
     """True if this param carries a server-side object handle."""
-    return param.get("_raw_pyi") in handle_classes
+    return param.get('_raw_pyi') in handle_classes
 
 
 def _is_ndarray_return(method: dict) -> bool:
-    ret = method.get("returns", {})
-    return ret.get("$ref") == "#/$defs/ndarray"
+    ret = method.get('returns', {})
+    return ret.get('$ref') == '#/$defs/ndarray'
 
 
 def _is_handle_return(method: dict) -> bool:
-    ret = method.get("returns", {})
-    return ret.get("$ref") == "#/$defs/handle" and "returns_class" in ret
+    ret = method.get('returns', {})
+    return ret.get('$ref') == '#/$defs/handle' and 'returns_class' in ret
 
 
 def _return_class(method: dict) -> str | None:
-    return method.get("returns", {}).get("returns_class")
+    return method.get('returns', {}).get('returns_class')
 
 
 def _is_data_object(class_name: str, cls: dict) -> bool:
-    _ = class_name # TODO: might need this later, not sure yet
+    _ = class_name  # TODO: might need this later, not sure yet
     """DataObject classes are identified by having a discard() method."""
-    return "discard" in cls.get("methods", {})
+    return 'discard' in cls.get('methods', {})
 
 
 def _collect_methods(class_name: str, schema: dict) -> dict:
@@ -43,8 +43,8 @@ def _collect_methods(class_name: str, schema: dict) -> dict:
     ancestor methods from abstract_bases in MRO order.
     The class's own methods take priority over inherited ones.
     """
-    cls = schema["classes"][class_name]
-    inherited_names = cls.get("inherits", [])
+    cls = schema['classes'][class_name]
+    inherited_names = cls.get('inherits', [])
     if isinstance(inherited_names, str):
         inherited_names = [inherited_names]
 
@@ -52,32 +52,32 @@ def _collect_methods(class_name: str, schema: dict) -> dict:
     # Walk bases first (depth-first), then apply own methods on top
     for base in inherited_names:
         merged.update(_collect_abstract_methods(base, schema))
-    merged.update(cls.get("methods", {}))
+    merged.update(cls.get('methods', {}))
     return merged
 
 
 def _collect_abstract_methods(base_name: str, schema: dict) -> dict:
     """Recursively collect methods from abstract_bases, respecting their own inheritance."""
-    bases_section = schema["abstract_bases"]
+    bases_section = schema['abstract_bases']
     if base_name not in bases_section:
         return {}
     base = bases_section[base_name]
-    parent = base.get("inherits")
+    parent = base.get('inherits')
     result = {}
     if parent:
         parents = [parent] if isinstance(parent, str) else parent
         for p in parents:
             result.update(_collect_abstract_methods(p, schema))
-    result.update(base.get("methods", {}))
+    result.update(base.get('methods', {}))
     return result
 
 
 def _repr_default(val) -> str:
     """Python literal for a default value."""
     if val is None:
-        return "None"
+        return 'None'
     if isinstance(val, bool):
-        return "True" if val else "False"
+        return 'True' if val else 'False'
     if isinstance(val, str):
         return repr(val)
     return str(val)
@@ -165,8 +165,8 @@ class ServerGenerator:
         self.handle_classes = _all_class_names(schema)
         # self.constructor_fns = schema.get("functions", {})
         self._ctor_fn: dict[str, str] = {}
-        for fn_name, fn in schema["functions"].items():
-            rc = fn.get("returns", {}).get("returns_class")
+        for fn_name, fn in schema['functions'].items():
+            rc = fn.get('returns', {}).get('returns_class')
             if rc:
                 self._ctor_fn[rc] = fn_name
 
@@ -175,49 +175,49 @@ class ServerGenerator:
         lines += self._gen_module_functions()
         lines += self._gen_class_constructors()
         lines += self._gen_class_methods()
-        return "\n".join(lines)
+        return '\n'.join(lines)
 
     def _gen_module_functions(self) -> list[str]:
         lines = [
-            "# Module-level functions",
-            "",
+            '# Module-level functions',
+            '',
         ]
-        for fn_name, fn in self.schema["functions"].items():
-            if fn_name.startswith("_"):
+        for fn_name, fn in self.schema['functions'].items():
+            if fn_name.startswith('_'):
                 continue
             lines += self._fn_handler(fn_name, fn)
-            lines.append("")
+            lines.append('')
         return lines
 
     def _fn_handler(self, fn_name: str, fn: dict) -> list[str]:
-        ret_class = fn.get("returns", {}).get("returns_class")
+        ret_class = fn.get('returns', {}).get('returns_class')
         is_ndarray = _is_ndarray_return(fn)
-        variadic = fn.get("params_variable", False)
+        variadic = fn.get('params_variable', False)
 
         lines = [
             f'@handler("{fn_name}")',
-            f"def _fn_{fn_name}(ctx: HandlerContext, params):",
+            f'def _fn_{fn_name}(ctx: HandlerContext, params):',
         ]
 
         if variadic:
-            call = f"TT.{fn_name}(*params)"
+            call = f'TT.{fn_name}(*params)'
         else:
-            params = fn.get("params", [])
+            params = fn.get('params', [])
             args = self._server_args(params, offset=0)
             if len(args) == 0:
-                lines.append("    _ = params")
-            call = f"TT.{fn_name}({args})"
+                lines.append('    _ = params')
+            call = f'TT.{fn_name}({args})'
 
         if ret_class:
-            lines.append(f"    obj = {call}")
+            lines.append(f'    obj = {call}')
             lines.append(
-                f"    return _register(obj, {ret_class!r}, ctx.session_id, ctx.registry, ctx.sessions)"
+                f'    return _register(obj, {ret_class!r}, ctx.session_id, ctx.registry, ctx.sessions)'
             )
         elif is_ndarray:
-            lines.append(f"    return _pack_ndarray({call})")
+            lines.append(f'    return _pack_ndarray({call})')
         else:
-            lines.append("    _ = ctx")
-            lines.append(f"    return {call}")
+            lines.append('    _ = ctx')
+            lines.append(f'    return {call}')
 
         return lines
 
@@ -225,11 +225,11 @@ class ServerGenerator:
 
     def _gen_class_constructors(self) -> list[str]:
         lines = [
-            "# Class constructors",
-            "",
+            '# Class constructors',
+            '',
         ]
-        for class_name, cls in self.schema["classes"].items():
-            ctor = cls.get("constructor")
+        for class_name, cls in self.schema['classes'].items():
+            ctor = cls.get('constructor')
             if ctor is None:
                 continue
             # Skip classes that have a dedicated module-level factory function
@@ -237,77 +237,75 @@ class ServerGenerator:
             if class_name in self._ctor_fn:
                 continue
             lines += self._ctor_handler(class_name, ctor)
-            lines.append("")
+            lines.append('')
         return lines
 
     def _ctor_handler(self, class_name: str, ctor: dict) -> list[str]:
-        variadic = ctor.get("params_variable", False)
-        params = ctor.get("params", [])
+        variadic = ctor.get('params_variable', False)
+        params = ctor.get('params', [])
 
         lines = [
             f'@handler("{class_name}")',
-            f"def _ctor_{class_name}(ctx: HandlerContext, params):",
+            f'def _ctor_{class_name}(ctx: HandlerContext, params):',
         ]
 
         if variadic:
             # Resolve first param if it's a handle, splat the rest
-            lines.append(f"    obj = TT.{class_name}(*params)")
+            lines.append(f'    obj = TT.{class_name}(*params)')
         else:
             args = self._server_args(params, offset=0)
-            lines.append(f"    obj = TT.{class_name}({args})")
+            lines.append(f'    obj = TT.{class_name}({args})')
 
         lines.append(
-            f"    return _register(obj, {class_name!r}, ctx.session_id, ctx.registry, ctx.sessions)"
+            f'    return _register(obj, {class_name!r}, ctx.session_id, ctx.registry, ctx.sessions)'
         )
         return lines
 
-
     def _gen_class_methods(self) -> list[str]:
         lines = [
-            "# Instance methods",
-            "",
+            '# Instance methods',
+            '',
         ]
-        for class_name in self.schema["classes"]:
+        for class_name in self.schema['classes']:
             all_methods = _collect_methods(class_name, self.schema)
             for method_name, method in all_methods.items():
                 lines += self._method_handler(class_name, method_name, method)
-                lines.append("")
+                lines.append('')
         return lines
 
     def _method_handler(
         self, class_name: str, method_name: str, method: dict
     ) -> list[str]:
-        fn = f"_m_{class_name}_{method_name}"
+        fn = f'_m_{class_name}_{method_name}'
         ret_class = _return_class(method)
         is_ndarray = _is_ndarray_return(method)
         is_handle = _is_handle_return(method)
-        variadic = method.get("params_variable", False)
-        params = method.get("params", [])
+        variadic = method.get('params_variable', False)
+        params = method.get('params', [])
 
         lines = [
             f'@handler("{class_name}.{method_name}")',
-            f"def {fn}(ctx: HandlerContext, params):",
+            f'def {fn}(ctx: HandlerContext, params):',
         ]
-        lines.append("    obj = _lookup(ctx.registry, params[0])")
+        lines.append('    obj = _lookup(ctx.registry, params[0])')
 
         if variadic:
-            call = f"obj.{method_name}(*params[1:])"
+            call = f'obj.{method_name}(*params[1:])'
         else:
             args = self._server_args(params, offset=1)
-            call = f"obj.{method_name}({args})"
+            call = f'obj.{method_name}({args})'
 
         if is_handle:
-            lines.append(f"    result = {call}")
+            lines.append(f'    result = {call}')
             lines.append(
-                f"    return _register(result, {ret_class!r}, ctx.session_id, ctx.registry, ctx.sessions)"
+                f'    return _register(result, {ret_class!r}, ctx.session_id, ctx.registry, ctx.sessions)'
             )
         elif is_ndarray:
-            lines.append(f"    return _pack_ndarray({call})")
+            lines.append(f'    return _pack_ndarray({call})')
         else:
-            lines.append(f"    return {call}")
+            lines.append(f'    return {call}')
 
         return lines
-
 
     def _server_args(self, params: list, offset: int) -> str:
         """Build the argument string for a TT call from params[offset:]."""
@@ -315,10 +313,10 @@ class ServerGenerator:
         for i, p in enumerate(params):
             idx = i + offset
             if _is_handle_param(p, self.handle_classes):
-                parts.append(f"_lookup(ctx.registry, params[{idx}])")
+                parts.append(f'_lookup(ctx.registry, params[{idx}])')
             else:
-                parts.append(f"params[{idx}]")
-        return ", ".join(parts)
+                parts.append(f'params[{idx}]')
+        return ', '.join(parts)
 
 
 CLIENT_HEADER = '''\
@@ -392,8 +390,8 @@ class ClientGenerator:
         self.handle_classes = _all_class_names(schema)
         # Map factory function name → class name
         self._factory_to_class: dict[str, str] = {}
-        for fn_name, fn in schema["functions"].items():
-            rc = fn.get("returns", {}).get("returns_class")
+        for fn_name, fn in schema['functions'].items():
+            rc = fn.get('returns', {}).get('returns_class')
             if rc:
                 self._factory_to_class[fn_name] = rc
         # Classes returned directly by factory functions (tagger types).
@@ -405,16 +403,16 @@ class ClientGenerator:
         lines = [CLIENT_HEADER]
         lines += self._gen_classes()
         lines += self._gen_session_class()
-        return "\n".join(lines)
+        return '\n'.join(lines)
 
     def _gen_classes(self) -> list[str]:
         lines = [
-            "# Stub classes",
-            "",
+            '# Stub classes',
+            '',
         ]
-        for class_name, cls in self.schema["classes"].items():
+        for class_name, cls in self.schema['classes'].items():
             lines += self._gen_class(class_name, cls)
-            lines.append("")
+            lines.append('')
         return lines
 
     def _gen_class(self, class_name: str, cls: dict) -> list[str]:
@@ -422,7 +420,7 @@ class ClientGenerator:
         is_factory_returned = class_name in self._factory_returned
         all_methods = _collect_methods(class_name, self.schema)
 
-        lines = [f"class {class_name}:"]
+        lines = [f'class {class_name}:']
 
         # __init__
         # DataObjects and factory-returned tagger classes both get the simple
@@ -432,31 +430,31 @@ class ClientGenerator:
         else:
             lines += self._gen_user_init(class_name, cls)
 
-        lines.append("")
+        lines.append('')
 
         # methods
         for method_name, method in all_methods.items():
             lines += self._gen_method(class_name, method_name, method)
-            lines.append("")
+            lines.append('')
 
         return lines
 
     def _gen_data_obj_init(self, class_name: str) -> list[str]:
         return [
             '    """Server-side data object. Obtained via getDataObject() / getData()."""',
-            "    def __init__(self, _rpc: _Connection, _handle: int):",
-            "        self._rpc = _rpc",
-            "        self._handle = _handle",
+            '    def __init__(self, _rpc: _Connection, _handle: int):',
+            '        self._rpc = _rpc',
+            '        self._handle = _handle',
         ]
 
     def _gen_user_init(self, class_name: str, cls: dict) -> list[str]:
-        ctor = cls.get("constructor")
+        ctor = cls.get('constructor')
         if ctor is None:
             # No constructor in schema — internal/abstract class
             return [
-                "    def __init__(self, _rpc: _Connection, _handle: int):",
-                "        self._rpc = _rpc",
-                "        self._handle = _handle",
+                '    def __init__(self, _rpc: _Connection, _handle: int):',
+                '        self._rpc = _rpc',
+                '        self._handle = _handle',
             ]
 
         # constructor may be a string reference to a factory fn (e.g. "createTimeTagger")
@@ -464,145 +462,165 @@ class ClientGenerator:
             ctor = {}
 
         factory_fn = next(
-            (fn for fn, c in self._factory_to_class.items() if c == class_name), None
+            (fn for fn, c in self._factory_to_class.items() if c == class_name),
+            None,
         )
 
-        if ctor.get("params_variable"):
-            sig = "    def __init__(self, *args):"
+        if ctor.get('params_variable'):
+            sig = '    def __init__(self, *args):'
             method_key = factory_fn if factory_fn else class_name
             return [
                 sig,
-                "        self._rpc = args[0]._rpc",
-                f"        self._handle = self._rpc.request({method_key!r}, "
-                f"[args[0]._handle, *args[1:]])",
+                '        self._rpc = args[0]._rpc',
+                f'        self._handle = self._rpc.request({method_key!r}, '
+                f'[args[0]._handle, *args[1:]])',
             ]
 
-        params = ctor.get("params", [])
+        params = ctor.get('params', [])
         py_params, rpc_args = self._client_params_and_args(params)
-        sig_params = ", ".join(["self"] + py_params)
+        sig_params = ', '.join(['self'] + py_params)
         method_key = factory_fn if factory_fn else class_name
 
         # The first handle-type param carries the _rpc connection.
         first_handle = next(
-            (p["name"] for p in params if _is_handle_param(p, self.handle_classes)),
+            (
+                p['name']
+                for p in params
+                if _is_handle_param(p, self.handle_classes)
+            ),
             None,
         )
-        rpc_source = f"{first_handle}._rpc" if first_handle else "_rpc"
+        rpc_source = f'{first_handle}._rpc' if first_handle else '_rpc'
 
         return [
-            f"    def __init__({sig_params}):",
-            f"        self._rpc = {rpc_source}",
-            f"        self._handle = self._rpc.request({method_key!r}, [{rpc_args}])",
+            f'    def __init__({sig_params}):',
+            f'        self._rpc = {rpc_source}',
+            f'        self._handle = self._rpc.request({method_key!r}, [{rpc_args}])',
         ]
 
-    def _gen_method(self, class_name: str, method_name: str, method: dict) -> list[str]:
-        variadic = method.get("params_variable", False)
-        params = method.get("params", [])
+    def _gen_method(
+        self, class_name: str, method_name: str, method: dict
+    ) -> list[str]:
+        variadic = method.get('params_variable', False)
+        params = method.get('params', [])
         ret_class = _return_class(method)
         is_ndarray = _is_ndarray_return(method)
-        is_null = method.get("returns", {}).get("type") == "null"
-        rpc_key = f"{class_name}.{method_name}"
+        is_null = method.get('returns', {}).get('type') == 'null'
+        rpc_key = f'{class_name}.{method_name}'
+
+        ret_sig = ''
+        if ret_class is not None:
+            ret_sig = f' -> {ret_class}'
 
         if variadic:
-            sig = f"    def {method_name}(self, *args):"
-            rpc_args = "[self._handle, *args]"
+            sig = f'    def {method_name}(self, *args){ret_sig}:'
+            rpc_args = '[self._handle, *args]'
         else:
             py_params, rpc_args_str = self._client_params_and_args(params)
-            sig_params = ", ".join(["self"] + py_params)
-            sig = f"    def {method_name}({sig_params}):"
+            sig_params = ', '.join(['self'] + py_params)
+            sig = f'    def {method_name}({sig_params}){ret_sig}:'
             rpc_args = (
-                f"[self._handle, {rpc_args_str}]" if rpc_args_str else "[self._handle]"
+                f'[self._handle, {rpc_args_str}]'
+                if rpc_args_str
+                else '[self._handle]'
             )
 
-        call = f"self._rpc.request({rpc_key!r}, {rpc_args})"
+        call = f'self._rpc.request({rpc_key!r}, {rpc_args})'
 
         lines = [sig]
         if ret_class:
-            if ret_class.endswith("[]"):
+            if ret_class.endswith('[]'):
                 inner = ret_class[:-2]
-                lines.append(f"        handles = {call}")
-                lines.append(f"        return [{inner}(self._rpc, h) for h in handles]")
+                lines.append(f'        handles = {call}')
+                lines.append(
+                    f'        return [{inner}(self._rpc, h) for h in handles]'
+                )
             else:
-                lines.append(f"        handle = {call}")
-                lines.append(f"        return {ret_class}(self._rpc, handle)")
+                lines.append(f'        handle = {call}')
+                lines.append(f'        return {ret_class}(self._rpc, handle)')
         elif is_ndarray:
-            lines.append(f"        return _unpack_ndarray({call})")
+            lines.append(f'        return _unpack_ndarray({call})')
         elif is_null:
-            lines.append(f"        {call}")
+            lines.append(f'        {call}')
         else:
-            lines.append(f"        return {call}")
+            lines.append(f'        return {call}')
 
         return lines
 
     def _gen_session_class(self) -> list[str]:
         lines = [
-            "# Session, holds the connection and exposes all module-level functions",
-            "",
-            "class Session:",
-            "    def __init__(self, host: str, port: int):",
-            "        self._rpc = _Connection(host, port)",
-            "",
-            "    def close(self):",
-            "        self._rpc.close()",
-            "",
+            '# Session, holds the connection and exposes all module-level functions',
+            '',
+            'class Session:',
+            '    def __init__(self, host: str, port: int):',
+            '        self._rpc = _Connection(host, port)',
+            '',
+            '    def close(self):',
+            '        self._rpc.close()',
+            '',
         ]
-        for fn_name, fn in self.schema["functions"].items():
-            if fn_name.startswith("_"):
+        for fn_name, fn in self.schema['functions'].items():
+            if fn_name.startswith('_'):
                 continue
             lines += self._gen_session_method(fn_name, fn)
-            lines.append("")
+            lines.append('')
 
         # Module-level connect() entry point
         lines += [
-            "",
-            "# Entry point",
-            "",
+            '',
+            '# Entry point',
+            '',
             "def connect(host: str = 'localhost', port: int = 9000) -> Session:",
-            "    # Connect to a running TimeTagger RPC server.",
-            "    return Session(host, port)",
+            '    # Connect to a running TimeTagger RPC server.',
+            '    return Session(host, port)',
         ]
         return lines
 
     def _gen_session_method(self, fn_name: str, fn: dict) -> list[str]:
-        ret_class = fn.get("returns", {}).get("returns_class")
+        ret_class = fn.get('returns', {}).get('returns_class')
         is_ndarray = _is_ndarray_return(fn)
-        is_null = fn.get("returns", {}).get("type") == "null"
-        variadic = fn.get("params_variable", False)
-        is_factory = ret_class is not None and ret_class in self.schema["classes"]
+        is_null = fn.get('returns', {}).get('type') == 'null'
+        variadic = fn.get('params_variable', False)
+        is_factory = (
+            ret_class is not None and ret_class in self.schema['classes']
+        )
+
+        ret_sig = ''
+        if ret_class is not None:
+            ret_sig = f' -> {ret_class}'
 
         if variadic:
-            sig = f"    def {fn_name}(self, *args):"
+            sig = f'    def {fn_name}(self, *args){ret_sig}:'
             if is_factory:
                 # createTimeTagger(*args) → TimeTagger(self._rpc, handle)
                 return [
                     sig,
-                    f"        handle = self._rpc.request({fn_name!r}, list(args))",
-                    f"        return {ret_class}(self._rpc, handle)",
+                    f'        handle = self._rpc.request({fn_name!r}, list(args))',
+                    f'        return {ret_class}(self._rpc, handle)',
                 ]
-            call = f"self._rpc.request({fn_name!r}, list(args))"
+            call = f'self._rpc.request({fn_name!r}, list(args))'
         else:
-            params = fn.get("params", [])
+            params = fn.get('params', [])
             py_params, rpc_args = self._client_params_and_args(params)
             sig = (
-                f"    def {fn_name}(self, {', '.join(py_params)}):"
+                f'    def {fn_name}(self, {", ".join(py_params)}){ret_sig}:'
                 if py_params
-                else f"    def {fn_name}(self):"
+                else f'    def {fn_name}(self):{ret_sig}'
             )
-            rpc_list = f"[{rpc_args}]" if rpc_args else "[]"
+            rpc_list = f'[{rpc_args}]' if rpc_args else '[]'
             if is_factory:
                 return [
                     sig,
-                    f"        handle = self._rpc.request({fn_name!r}, {rpc_list})",
-                    f"        return {ret_class}(self._rpc, handle)",
+                    f'        handle = self._rpc.request({fn_name!r}, {rpc_list})',
+                    f'        return {ret_class}(self._rpc, handle)',
                 ]
-            call = f"self._rpc.request({fn_name!r}, {rpc_list})"
+            call = f'self._rpc.request({fn_name!r}, {rpc_list})'
 
         if is_ndarray:
-            return [sig, f"        return _unpack_ndarray({call})"]
+            return [sig, f'        return _unpack_ndarray({call})']
         if is_null:
-            return [sig, f"        {call}"]
-        return [sig, f"        return {call}"]
-
+            return [sig, f'        {call}']
+        return [sig, f'        return {call}']
 
     def _client_params_and_args(self, params: list) -> tuple[list[str], str]:
         """
@@ -614,26 +632,35 @@ class ClientGenerator:
         rpc_parts = []
 
         for p in params:
-            name = p["name"]
-            has_default = "default" in p
-            default_val = _repr_default(p.get("default")) if has_default else None
+            name = p['name']
+            has_default = 'default' in p
+            default_val = (
+                _repr_default(p.get('default')) if has_default else None
+            )
 
             if _is_handle_param(p, self.handle_classes):
-                py_params.append(f"{name}={default_val}" if has_default else name)
-                rpc_parts.append(f"{name}._handle")
+                py_params.append(
+                    f'{name}={default_val}' if has_default else name
+                )
+                rpc_parts.append(f'{name}._handle')
             else:
-                py_params.append(f"{name}={default_val}" if has_default else name)
+                py_params.append(
+                    f'{name}={default_val}' if has_default else name
+                )
                 rpc_parts.append(name)
 
-        return py_params, ", ".join(rpc_parts)
+        return py_params, ', '.join(rpc_parts)
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("schema", help="Path to generated schema JSON")
-    parser.add_argument("--out-dir", default=".", help="Output directory (default: .)")
+    parser.add_argument('schema', help='Path to generated schema JSON')
+    parser.add_argument(
+        '--out-dir', default='.', help='Output directory (default: .)'
+    )
     args = parser.parse_args()
 
     schema = _load_schema(args.schema)
@@ -643,15 +670,15 @@ def main():
     server_src = ServerGenerator(schema).generate()
     client_src = ClientGenerator(schema).generate()
 
-    server_path = out_dir / "server_handlers.py"
-    client_path = out_dir / "client_stubs.py"
+    server_path = out_dir / 'server_handlers.py'
+    client_path = out_dir / 'client_stubs.py'
 
     server_path.write_text(server_src)
     client_path.write_text(client_src)
 
-    print(f"Written: {server_path}")
-    print(f"Written: {client_path}")
+    print(f'Written: {server_path}')
+    print(f'Written: {client_path}')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
