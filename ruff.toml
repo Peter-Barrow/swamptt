@@ -1,0 +1,14 @@
+line-length = 80
+
+[format]
+quote-style = "single"
+indent-style = "space"
+docstring-code-format = true
+docstring-code-line-length = 60
+preview = true
+
+[lint]
+preview = true
+
+[lint.pydocstyle]
+convention = "google"
