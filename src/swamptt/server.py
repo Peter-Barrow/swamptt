@@ -90,7 +90,7 @@ async def _async_main():
     global executor
     executor = ThreadPoolExecutor(
         max_workers=1,
-        thread_name_prefix='swamppt-server-worker',
+        thread_name_prefix='swamptt-server-worker',
     )
 
     # Add this if you want to use run_in_executor(None, ...) elsewhere —
@@ -109,7 +109,7 @@ async def _async_main():
 def main():
     listener = _listener()
     listener.start()
-    logger.info('SWAMPPT server started')
+    logger.info('SWAMPTT server started')
     try:
     
         asyncio.run(_async_main())
