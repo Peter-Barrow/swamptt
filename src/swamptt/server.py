@@ -1,14 +1,14 @@
-import sys
 import asyncio
 import itertools
 import logging
 import logging.handlers
 import queue
+import sys
 from concurrent.futures import ThreadPoolExecutor
 
 import msgpack
 
-from server_handlers import HANDLERS, HandlerContext
+from .server_handlers import HANDLERS, HandlerContext
 
 registry = {
     '_counter': itertools.count(1),  # look up counter when requesting a ctor,
@@ -65,7 +65,9 @@ async def handle_client(
                 # msgpack-rpc request: [type=0, msgid, method, params]
                 msgid, method, params = msg[1], msg[2], msg[3]
                 ctx = HandlerContext(session_id, registry, sessions)
-                logger.info(f'-> session: {session_id}:{msgid} requested {method}')
+                logger.info(
+                    f'-> session: {session_id}:{msgid} requested {method}'
+                )
                 try:
                     result = await loop.run_in_executor(
                         executor,
@@ -89,7 +91,7 @@ async def handle_client(
 async def _async_main():
     global executor
     executor = ThreadPoolExecutor(
-        max_workers=1,
+        max_workers=4,
         thread_name_prefix='swamptt-server-worker',
     )
 
@@ -111,7 +113,6 @@ def main():
     listener.start()
     logger.info('SWAMPTT server started')
     try:
-    
         asyncio.run(_async_main())
     except KeyboardInterrupt:
         logger.info('Shutting down server')
