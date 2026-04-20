@@ -349,12 +349,13 @@ import msgpack
 class _Connection:
     def __init__(self, host: str, port: int):
         self._sock = socket.create_connection((host, port))
+        self._sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
         self._unpacker = msgpack.Unpacker(raw=False)
         self._msgid = itertools.count(1)
 
     def request(self, method: str, params: list):
         msgid = next(self._msgid)
-        self._sock.sendall(msgpack.packb([0, msgid, method, params]))
+        self._sock.sendall(msgpack.packb([0, msgid, method, params], use_bin_type=True))
         while True:
             self._unpacker.feed(self._sock.recv(65536))
             for msg in self._unpacker:
