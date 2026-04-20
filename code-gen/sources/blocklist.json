@@ -1,0 +1,150 @@
+{
+  "_description": "Human-maintained source of truth for the RPC surface. The pyi_to_schema.py converter reads this alongside the .pyi to produce the schema. When Swabian ships a new .pyi, re-run the converter and review the diff — do NOT edit the generated schema directly.",
+
+  "excluded_classes": {
+    "SwigPyIterator":         "swig_internal",
+    "_CharVector":            "swig_internal",
+    "_UCharVector":           "swig_internal",
+    "_ShortVector":           "swig_internal",
+    "_UShortVector":          "swig_internal",
+    "_IntVector":             "swig_internal",
+    "_UIntVector":            "swig_internal",
+    "_LongVector":            "swig_internal",
+    "_ULongVector":           "swig_internal",
+    "_LongLongVector":        "swig_internal",
+    "_ULongLongVector":       "swig_internal",
+    "_FloatVector":           "swig_internal",
+    "_DoubleVector":          "swig_internal",
+    "_StringVector":          "swig_internal",
+    "_EventVector":           "swig_internal",
+    "_EventVectorVector":     "swig_internal",
+    "_TimeTaggerServerVector":"swig_internal",
+    "_IntVectorVector":       "swig_internal",
+    "_SwigNonDynamicMeta":    "swig_internal",
+    "Tag":                    "swig_internal",
+    "Event":                  "swig_internal",
+    "Experimental":           "swig_internal",
+    "CustomMeasurementBase":  "callback",
+    "CustomMeasurement":      "callback",
+    "FlimBase":               "callback",
+    "Experimental_PhotonGenerator":     "callback",
+    "Experimental_DlsSignalGenerator":  "callback",
+    "Experimental_FcsSignalGenerator":  "callback",
+    "Experimental_SignalGeneratorBase": "abstract",
+    "FlimAbstract":           "abstract",
+    "IteratorBase":           "abstract",
+    "Iterator":               "dangerous",
+    "HistogramCustomBins":    "excluded",
+    "CustomLogger":           "callback",
+    "TimeTaggerServer":       "abstract"
+  },
+
+  "excluded_functions": {
+    "setLogger":                 "callback"
+  },
+
+  "excluded_methods": {
+    "*":               ["__init__", "__del__", "__enter__", "__exit__",
+                        "__disown__", "__swig_destroy__",
+                        "thisown", "this"],
+    "IteratorBase":    ["waitUntilFinished"],
+    "TimeTagger":      ["factoryAccess"]
+  },
+
+  "_notes": {
+    "_description": "Human annotations only — not read by the converter. Records classes that were absent from the old Pyro server for no good reason, so reviewers know these are intentional additions rather than oversights.",
+    "previously_absent_from_pyro": {
+      "functions": ["createTimeTaggerVirtual"],
+      "classes":   ["FileReader", "TimeTagStreamBuffer", "TimeTaggerVirtual",
+                    "Experimental_SimDetector", "Experimental_PulsePerSecondData",
+                    "FlimFrameInfo"]
+    }
+  },
+
+  "abstract_bases": {
+    "_description": "Classes whose methods are inherited but which are never standalone handles on the wire.",
+    "classes": ["TimeTaggerSource", "TimeTaggerBase", "TimeTaggerHardware", "IteratorBase"]
+  },
+
+  "type_overrides": {
+    "_description": "The pyi uses 'void' for methods that actually return ndarrays via SWIG output arguments. List them here so the converter emits the correct wire type.",
+    "ndarray_returns": {
+      "Counter":            ["getData", "getIndex", "getDataNormalized", "getDataTotalCounts"],
+      "CounterData":        ["getIndex", "getData", "getDataNormalized", "getDataTotalCounts",
+                             "getTime", "getOverflowMask", "getChannels", "getFrequency"],
+      "Countrate":          ["getData", "getCountsTotal"],
+      "Correlation":        ["getData", "getDataNormalized", "getIndex"],
+      "CorrelationPairs":   ["getIndex"],
+      "CorrelationPairsData": ["getCounts", "getG2", "getIndex"],
+      "Histogram":          ["getData", "getIndex"],
+      "Histogram2D":        ["getData", "getIndex", "getIndex_1", "getIndex_2"],
+      "HistogramND":        ["getData", "getIndex"],
+      "HistogramLogBins":   ["getData", "getBinEdges", "getDataNormalizedCountsPerPs",
+                             "getDataNormalizedG2"],
+      "HistogramLogBinsData": ["getG2", "getCounts", "getG2Normalization"],
+      "TimeDifferences":    ["getData", "getIndex"],
+      "TimeDifferencesND":  ["getData", "getIndex", "getHistogramIndex", "getRollovers"],
+      "CountBetweenMarkers":["getData", "getIndex", "getBinWidths"],
+      "StartStop":          ["getData"],
+      "Sampler":            ["getData", "getDataAsMask"],
+      "PhaseNoise":         [],
+      "PhaseNoiseData":     ["getPhaseNoise", "getOffset", "getAveragedSequences"],
+      "FrequencyCounter":   [],
+      "FrequencyCounterData": ["getIndex", "getTime", "getPeriodsCount", "getPeriodsFraction",
+                               "getPhase", "getFrequency", "getFrequencyInstantaneous",
+                               "getOverflowMask"],
+      "FrequencyStabilityData": ["getTau", "getADEV", "getMDEV", "getHDEV", "getSTDD",
+                                  "getADEVScaled", "getTDEV", "getHDEVScaled",
+                                  "getTraceIndex", "getTracePhase", "getTraceFrequency",
+                                  "getTraceFrequencyAbsolute"],
+      "Combiner":           ["getChannelCounts", "getData"],
+      "TimeTagger":         ["getDistributionCount", "getDistributionPSecs"],
+      "Flim":               ["getCurrentFrame", "getCurrentFrameIntensity", "getIndex",
+                             "getReadyFrame", "getReadyFrameIntensity",
+                             "getSummedFrames", "getSummedFramesIntensity"],
+      "FlimFrameInfo":      ["getHistograms", "getIntensities", "getSummedCounts",
+                             "getPixelBegins", "getPixelEnds"],
+      "Sampler":            ["getData", "getDataAsMask"],
+      "Experimental_PulsePerSecondData": ["getIndices", "getReferenceOffsets",
+                                          "getSignalOffsets", "getUtcSeconds", "getStatus"],
+      "TimeTagStreamBuffer":             ["getTimestamps", "getChannels", "getOverflows",
+                                          "getEventTypes", "getMissedEvents"]
+    },
+    "handle_returns": {
+      "_description": "Methods whose pyi return type is a class name that becomes a handle on the wire.",
+      "Counter":                       {"getDataObject": "CounterData"},
+      "CorrelationPairs":              {"getDataObject": "CorrelationPairsData"},
+      "HistogramLogBins":              {"getDataObject": "HistogramLogBinsData"},
+      "FrequencyCounter":              {"getDataObject": "FrequencyCounterData"},
+      "FrequencyStability":            {"getDataObject": "FrequencyStabilityData"},
+      "PhaseNoise":                    {"getDataObject": "PhaseNoiseData"},
+      "Experimental_PulsePerSecondMonitor": {"getDataObject": "Experimental_PulsePerSecondData"},
+      "TimeTagStream":                 {"getData": "TimeTagStreamBuffer"},
+      "FileReader":                    {"getData": "TimeTagStreamBuffer"},
+      "Flim":                          {"getCurrentFrameEx": "FlimFrameInfo",
+                                        "getReadyFrameEx":   "FlimFrameInfo",
+                                        "getSummedFramesEx": "FlimFrameInfo"},
+      "TimeTaggerNetwork":             {"getServer": "TimeTaggerServer",
+                                        "getServers": "TimeTaggerServer[]"},
+      "SynchronizedMeasurements":      {"getTagger": "TimeTaggerBase"}
+    },
+    "data_object_naming_fixes": {
+      "_description": "Pyro server bug: make_data_object_adaptor_class appends 'Data' to the class name. For PulsePerSecondMonitor this produces a wrong class name. Map the correct class names here.",
+      "Experimental_PulsePerSecondMonitor": "Experimental_PulsePerSecondData"
+    }
+  },
+
+  "data_object_classes": {
+    "_description": "Classes that are DataObject handles (returned by getDataObject/getData, released via discard()). The converter adds a 'discard' method to each.",
+    "classes": ["CounterData", "CorrelationPairsData", "HistogramLogBinsData",
+                "FrequencyCounterData", "FrequencyStabilityData", "PhaseNoiseData",
+                "Experimental_PulsePerSecondData", "TimeTagStreamBuffer", "FlimFrameInfo"]
+  },
+
+  "constructor_functions": {
+    "_description": "Module-level factory functions and the class they produce.",
+    "createTimeTagger":        "TimeTagger",
+    "createTimeTaggerNetwork": "TimeTaggerNetwork",
+    "createTimeTaggerVirtual": "TimeTaggerVirtual"
+  }
+}
