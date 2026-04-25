@@ -701,7 +701,7 @@ def main():
     client_src = ClientGenerator(schema).generate()
 
     server_path = out_dir / 'server_handlers.py'
-    client_path = out_dir / 'client_stubs.py'
+    client_path = out_dir / 'client.py'
 
     server_path.write_text(server_src)
     client_path.write_text(client_src)
