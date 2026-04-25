@@ -341,7 +341,9 @@ from __future__ import annotations
 import io
 import itertools
 import socket
+from collections.abc import Callable
 from functools import wraps
+from typing import Concatenate, ParamSpec, TypeVar
 
 import msgpack
 import numpy as np
@@ -397,11 +399,14 @@ def remote(cls):
     cls.__init__ = __init__
     return cls
 
+P = ParamSpec('P')
+R = TypeVar('R')
+
 # let's wrap the module level functions in the same way, now we can do things
 # like 'TT.getVersion()' just like we would with the *real* library
-def remote_fn(fn):
+def remote_fn[**P, R](fn: Callable[Concatenate[_Connection, P], R]) -> Callable[P, R]:
     @wraps(fn)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
         rpc = get_connection()
         return fn(rpc, *args, **kwargs)
     return wrapper
@@ -484,8 +489,7 @@ class ClientGenerator:
     def _gen_data_obj_init(self, class_name: str) -> list[str]:
         return [
             '    """Server-side data object. Obtained via getDataObject() / getData()."""',
-            '    def __init__(self, _rpc: _Connection, _handle: int):',
-            '        self._rpc = _rpc',
+            '    def __init__(self, _handle: int):',
             '        self._handle = _handle',
         ]
 
@@ -567,7 +571,7 @@ class ClientGenerator:
                 )
             else:
                 lines.append(f'        handle = {call}')
-                lines.append(f'        return {ret_class}(self._rpc, handle)')
+                lines.append(f'        return {ret_class}(handle)')
         elif is_ndarray:
             lines.append(f'        return _unpack_ndarray({call})')
         elif is_null:
@@ -609,7 +613,7 @@ class ClientGenerator:
                     '@remote_fn',
                     sig,
                     f'    handle = _rpc.request({fn_name!r}, list(args))',
-                    f'    return {ret_class}(_rpc, handle)',
+                    f'    return {ret_class}(handle)',
                 ]
             call = f'_rpc.request({fn_name!r}, list(args))'
         else:
@@ -626,7 +630,7 @@ class ClientGenerator:
                     '@remote_fn',
                     sig,
                     f'    handle = _rpc.request({fn_name!r}, {rpc_list})',
-                    f'    return {ret_class}(_rpc, handle)',
+                    f'    return {ret_class}(handle)',
                 ]
             call = f'_rpc.request({fn_name!r}, {rpc_list})'
 

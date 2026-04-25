@@ -21,7 +21,9 @@ from __future__ import annotations
 import io
 import itertools
 import socket
+from collections.abc import Callable
 from functools import wraps
+from typing import Concatenate, ParamSpec, TypeVar
 
 import msgpack
 import numpy as np
@@ -63,6 +65,9 @@ def get_connection() -> _Connection:
 
     return _active_connection
 
+# wrap classes with a decorator to inject the rpc connection, this way we can
+# have the module look the same to the user as the actual swabian timetagger
+# library
 def remote(cls):
     original_init = cls.__init__
 
@@ -74,9 +79,14 @@ def remote(cls):
     cls.__init__ = __init__
     return cls
 
-def remote_fn(fn):
+P = ParamSpec('P')
+R = TypeVar('R')
+
+# let's wrap the module level functions in the same way, now we can do things
+# like 'TT.getVersion()' just like we would with the *real* library
+def remote_fn[**P, R](fn: Callable[Concatenate[_Connection, P], R]) -> Callable[P, R]:
     @wraps(fn)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
         rpc = get_connection()
         return fn(rpc, *args, **kwargs)
     return wrapper
@@ -189,121 +199,252 @@ class ReferenceClockState:
 
 
 @remote
+class TimeTaggerSource:
+
+    _rpc: _Connection # this is injected by the @remote decorator
+
+    def __init__(self,  *args):
+        self._handle = self._rpc.request('TimeTaggerSource',
+                            [getattr(a, '_handle', a) for a in args])
+
+    def setInputDelay(self, channel, delay):
+        self._rpc.request('TimeTaggerSource.setInputDelay', [self._handle, channel, delay])
+
+    def getInputDelay(self, channel):
+        return self._rpc.request('TimeTaggerSource.getInputDelay', [self._handle, channel])
+
+    def setDelayHardware(self, channel, delay):
+        self._rpc.request('TimeTaggerSource.setDelayHardware', [self._handle, channel, delay])
+
+    def getDelayHardware(self, channel):
+        return self._rpc.request('TimeTaggerSource.getDelayHardware', [self._handle, channel])
+
+    def getDelayHardwareRange(self, channel):
+        return self._rpc.request('TimeTaggerSource.getDelayHardwareRange', [self._handle, channel])
+
+    def setDelaySoftware(self, channel, delay):
+        self._rpc.request('TimeTaggerSource.setDelaySoftware', [self._handle, channel, delay])
+
+    def getDelaySoftware(self, channel):
+        return self._rpc.request('TimeTaggerSource.getDelaySoftware', [self._handle, channel])
+
+    def setDeadtime(self, channel, deadtime):
+        return self._rpc.request('TimeTaggerSource.setDeadtime', [self._handle, channel, deadtime])
+
+    def getDeadtime(self, channel):
+        return self._rpc.request('TimeTaggerSource.getDeadtime', [self._handle, channel])
+
+    def getDeadtimeRange(self, channel):
+        return self._rpc.request('TimeTaggerSource.getDeadtimeRange', [self._handle, channel])
+
+    def setConditionalFilter(self, trigger, filtered):
+        self._rpc.request('TimeTaggerSource.setConditionalFilter', [self._handle, trigger, filtered])
+
+    def clearConditionalFilter(self):
+        self._rpc.request('TimeTaggerSource.clearConditionalFilter', [self._handle])
+
+    def getConditionalFilterTrigger(self):
+        return self._rpc.request('TimeTaggerSource.getConditionalFilterTrigger', [self._handle])
+
+    def getConditionalFilterFiltered(self):
+        return self._rpc.request('TimeTaggerSource.getConditionalFilterFiltered', [self._handle])
+
+    def setEventDivider(self, channel, divider):
+        self._rpc.request('TimeTaggerSource.setEventDivider', [self._handle, channel, divider])
+
+    def getEventDivider(self, channel):
+        return self._rpc.request('TimeTaggerSource.getEventDivider', [self._handle, channel])
+
+    def getOverflows(self):
+        return self._rpc.request('TimeTaggerSource.getOverflows', [self._handle])
+
+    def getOverflowsAndClear(self):
+        return self._rpc.request('TimeTaggerSource.getOverflowsAndClear', [self._handle])
+
+    def clearOverflows(self):
+        self._rpc.request('TimeTaggerSource.clearOverflows', [self._handle])
+
+    def setReferenceClock(self, *args):
+        self._rpc.request('TimeTaggerSource.setReferenceClock', [self._handle, *args])
+
+    def disableReferenceClock(self):
+        self._rpc.request('TimeTaggerSource.disableReferenceClock', [self._handle])
+
+    def getReferenceClockState(self) -> ReferenceClockState:
+        handle = self._rpc.request('TimeTaggerSource.getReferenceClockState', [self._handle])
+        return ReferenceClockState(handle)
+
+
+@remote
+class TimeTaggerBase:
+
+    _rpc: _Connection # this is injected by the @remote decorator
+
+    def __init__(self,  *args):
+        self._handle = self._rpc.request('TimeTaggerBase',
+                            [getattr(a, '_handle', a) for a in args])
+
+    def setSoftwareClock(self, input_channel, input_frequency=10000000.0, averaging_periods=1000, wait_until_locked=True):
+        self._rpc.request('TimeTaggerBase.setSoftwareClock', [self._handle, input_channel, input_frequency, averaging_periods, wait_until_locked])
+
+    def disableSoftwareClock(self):
+        self._rpc.request('TimeTaggerBase.disableSoftwareClock', [self._handle])
+
+    def getSoftwareClockState(self) -> SoftwareClockState:
+        handle = self._rpc.request('TimeTaggerBase.getSoftwareClockState', [self._handle])
+        return SoftwareClockState(handle)
+
+    def getFence(self, alloc_fence=True):
+        return self._rpc.request('TimeTaggerBase.getFence', [self._handle, alloc_fence])
+
+    def getInvertedChannel(self, channel):
+        return self._rpc.request('TimeTaggerBase.getInvertedChannel', [self._handle, channel])
+
+    def isUnusedChannel(self, channel):
+        return self._rpc.request('TimeTaggerBase.isUnusedChannel', [self._handle, channel])
+
+    def getConfiguration(self):
+        return self._rpc.request('TimeTaggerBase.getConfiguration', [self._handle])
+
+    def getRegistrations(self, channel):
+        return self._rpc.request('TimeTaggerBase.getRegistrations', [self._handle, channel])
+
+    def isChannelRegistered(self, channel):
+        return self._rpc.request('TimeTaggerBase.isChannelRegistered', [self._handle, channel])
+
+    def xtra_setAutoStart(self, auto_start):
+        self._rpc.request('TimeTaggerBase.xtra_setAutoStart', [self._handle, auto_start])
+
+    def xtra_getAutoStart(self):
+        return self._rpc.request('TimeTaggerBase.xtra_getAutoStart', [self._handle])
+
+    def sync(self, timeout=-1):
+        self._rpc.request('TimeTaggerBase.sync', [self._handle, timeout])
+
+    def waitForFence(self, fence, timeout=-1):
+        self._rpc.request('TimeTaggerBase.waitForFence', [self._handle, fence, timeout])
+
+
+@remote
+class TimeTaggerHardware:
+
+    _rpc: _Connection # this is injected by the @remote decorator
+
+    def __init__(self,  *args):
+        self._handle = self._rpc.request('TimeTaggerHardware',
+                            [getattr(a, '_handle', a) for a in args])
+
+    def setTriggerLevel(self, channel, voltage):
+        self._rpc.request('TimeTaggerHardware.setTriggerLevel', [self._handle, channel, voltage])
+
+    def getTriggerLevel(self, channel):
+        return self._rpc.request('TimeTaggerHardware.getTriggerLevel', [self._handle, channel])
+
+    def getHardwareDelayCompensation(self, channel):
+        return self._rpc.request('TimeTaggerHardware.getHardwareDelayCompensation', [self._handle, channel])
+
+    def setHardwareDelayCompensationActive(self, use_compensation):
+        self._rpc.request('TimeTaggerHardware.setHardwareDelayCompensationActive', [self._handle, use_compensation])
+
+    def setInputImpedanceHigh(self, channel, high_impedance):
+        self._rpc.request('TimeTaggerHardware.setInputImpedanceHigh', [self._handle, channel, high_impedance])
+
+    def getInputImpedanceHigh(self, channel):
+        return self._rpc.request('TimeTaggerHardware.getInputImpedanceHigh', [self._handle, channel])
+
+    def setInputHysteresis(self, channel, value):
+        self._rpc.request('TimeTaggerHardware.setInputHysteresis', [self._handle, channel, value])
+
+    def getInputHysteresis(self, channel):
+        return self._rpc.request('TimeTaggerHardware.getInputHysteresis', [self._handle, channel])
+
+    def setNormalization(self, channels, state):
+        self._rpc.request('TimeTaggerHardware.setNormalization', [self._handle, channels, state])
+
+    def getNormalization(self, channel):
+        return self._rpc.request('TimeTaggerHardware.getNormalization', [self._handle, channel])
+
+    def getSerial(self):
+        return self._rpc.request('TimeTaggerHardware.getSerial', [self._handle])
+
+    def getModel(self):
+        return self._rpc.request('TimeTaggerHardware.getModel', [self._handle])
+
+    def getPcbVersion(self):
+        return self._rpc.request('TimeTaggerHardware.getPcbVersion', [self._handle])
+
+    def getFirmwareVersion(self):
+        return self._rpc.request('TimeTaggerHardware.getFirmwareVersion', [self._handle])
+
+    def getDACRange(self):
+        return self._rpc.request('TimeTaggerHardware.getDACRange', [self._handle])
+
+    def getTriggerLevelRange(self, channel):
+        return self._rpc.request('TimeTaggerHardware.getTriggerLevelRange', [self._handle, channel])
+
+    def getChannelList(self, *args):
+        return self._rpc.request('TimeTaggerHardware.getChannelList', [self._handle, *args])
+
+    def setHardwareBufferSize(self, size):
+        self._rpc.request('TimeTaggerHardware.setHardwareBufferSize', [self._handle, size])
+
+    def getHardwareBufferSize(self):
+        return self._rpc.request('TimeTaggerHardware.getHardwareBufferSize', [self._handle])
+
+    def getPsPerClock(self):
+        return self._rpc.request('TimeTaggerHardware.getPsPerClock', [self._handle])
+
+    def setStreamBlockSize(self, max_events, max_latency):
+        self._rpc.request('TimeTaggerHardware.setStreamBlockSize', [self._handle, max_events, max_latency])
+
+    def getStreamBlockSizeEvents(self):
+        return self._rpc.request('TimeTaggerHardware.getStreamBlockSizeEvents', [self._handle])
+
+    def getStreamBlockSizeLatency(self):
+        return self._rpc.request('TimeTaggerHardware.getStreamBlockSizeLatency', [self._handle])
+
+    def setTestSignal(self, *args):
+        self._rpc.request('TimeTaggerHardware.setTestSignal', [self._handle, *args])
+
+    def getTestSignal(self, channel):
+        return self._rpc.request('TimeTaggerHardware.getTestSignal', [self._handle, channel])
+
+    def setTestSignalDivider(self, divider):
+        self._rpc.request('TimeTaggerHardware.setTestSignalDivider', [self._handle, divider])
+
+    def getTestSignalDivider(self):
+        return self._rpc.request('TimeTaggerHardware.getTestSignalDivider', [self._handle])
+
+    def getDeviceLicense(self):
+        return self._rpc.request('TimeTaggerHardware.getDeviceLicense', [self._handle])
+
+    def getSensorData(self):
+        return self._rpc.request('TimeTaggerHardware.getSensorData', [self._handle])
+
+    def disableLEDs(self, disabled):
+        self._rpc.request('TimeTaggerHardware.disableLEDs', [self._handle, disabled])
+
+    def setLED(self, bitmask):
+        self._rpc.request('TimeTaggerHardware.setLED', [self._handle, bitmask])
+
+    def setSoundFrequency(self, freq_hz):
+        self._rpc.request('TimeTaggerHardware.setSoundFrequency', [self._handle, freq_hz])
+
+    def setTimeTaggerNetworkStreamCompression(self, active):
+        self._rpc.request('TimeTaggerHardware.setTimeTaggerNetworkStreamCompression', [self._handle, active])
+
+    def getChannelNumberScheme(self):
+        return self._rpc.request('TimeTaggerHardware.getChannelNumberScheme', [self._handle])
+
+
+@remote
 class TimeTaggerVirtual:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
     """Server-side data object. Obtained via getDataObject() / getData()."""
-    def __init__(self, _rpc: _Connection, _handle: int):
-        self._rpc = _rpc
+    def __init__(self, _handle: int):
         self._handle = _handle
-
-    def setInputDelay(self, channel, delay):
-        self._rpc.request('TimeTaggerVirtual.setInputDelay', [self._handle, channel, delay])
-
-    def getInputDelay(self, channel):
-        return self._rpc.request('TimeTaggerVirtual.getInputDelay', [self._handle, channel])
-
-    def setDelayHardware(self, channel, delay):
-        self._rpc.request('TimeTaggerVirtual.setDelayHardware', [self._handle, channel, delay])
-
-    def getDelayHardware(self, channel):
-        return self._rpc.request('TimeTaggerVirtual.getDelayHardware', [self._handle, channel])
-
-    def getDelayHardwareRange(self, channel):
-        return self._rpc.request('TimeTaggerVirtual.getDelayHardwareRange', [self._handle, channel])
-
-    def setDelaySoftware(self, channel, delay):
-        self._rpc.request('TimeTaggerVirtual.setDelaySoftware', [self._handle, channel, delay])
-
-    def getDelaySoftware(self, channel):
-        return self._rpc.request('TimeTaggerVirtual.getDelaySoftware', [self._handle, channel])
-
-    def setDeadtime(self, channel, deadtime):
-        return self._rpc.request('TimeTaggerVirtual.setDeadtime', [self._handle, channel, deadtime])
-
-    def getDeadtime(self, channel):
-        return self._rpc.request('TimeTaggerVirtual.getDeadtime', [self._handle, channel])
-
-    def getDeadtimeRange(self, channel):
-        return self._rpc.request('TimeTaggerVirtual.getDeadtimeRange', [self._handle, channel])
-
-    def setConditionalFilter(self, trigger, filtered):
-        self._rpc.request('TimeTaggerVirtual.setConditionalFilter', [self._handle, trigger, filtered])
-
-    def clearConditionalFilter(self):
-        self._rpc.request('TimeTaggerVirtual.clearConditionalFilter', [self._handle])
-
-    def getConditionalFilterTrigger(self):
-        return self._rpc.request('TimeTaggerVirtual.getConditionalFilterTrigger', [self._handle])
-
-    def getConditionalFilterFiltered(self):
-        return self._rpc.request('TimeTaggerVirtual.getConditionalFilterFiltered', [self._handle])
-
-    def setEventDivider(self, channel, divider):
-        self._rpc.request('TimeTaggerVirtual.setEventDivider', [self._handle, channel, divider])
-
-    def getEventDivider(self, channel):
-        return self._rpc.request('TimeTaggerVirtual.getEventDivider', [self._handle, channel])
-
-    def getOverflows(self):
-        return self._rpc.request('TimeTaggerVirtual.getOverflows', [self._handle])
-
-    def getOverflowsAndClear(self):
-        return self._rpc.request('TimeTaggerVirtual.getOverflowsAndClear', [self._handle])
-
-    def clearOverflows(self):
-        self._rpc.request('TimeTaggerVirtual.clearOverflows', [self._handle])
-
-    def setReferenceClock(self, *args):
-        self._rpc.request('TimeTaggerVirtual.setReferenceClock', [self._handle, *args])
-
-    def disableReferenceClock(self):
-        self._rpc.request('TimeTaggerVirtual.disableReferenceClock', [self._handle])
-
-    def getReferenceClockState(self) -> ReferenceClockState:
-        handle = self._rpc.request('TimeTaggerVirtual.getReferenceClockState', [self._handle])
-        return ReferenceClockState(self._rpc, handle)
-
-    def setSoftwareClock(self, input_channel, input_frequency=10000000.0, averaging_periods=1000, wait_until_locked=True):
-        self._rpc.request('TimeTaggerVirtual.setSoftwareClock', [self._handle, input_channel, input_frequency, averaging_periods, wait_until_locked])
-
-    def disableSoftwareClock(self):
-        self._rpc.request('TimeTaggerVirtual.disableSoftwareClock', [self._handle])
-
-    def getSoftwareClockState(self) -> SoftwareClockState:
-        handle = self._rpc.request('TimeTaggerVirtual.getSoftwareClockState', [self._handle])
-        return SoftwareClockState(self._rpc, handle)
-
-    def getFence(self, alloc_fence=True):
-        return self._rpc.request('TimeTaggerVirtual.getFence', [self._handle, alloc_fence])
-
-    def getInvertedChannel(self, channel):
-        return self._rpc.request('TimeTaggerVirtual.getInvertedChannel', [self._handle, channel])
-
-    def isUnusedChannel(self, channel):
-        return self._rpc.request('TimeTaggerVirtual.isUnusedChannel', [self._handle, channel])
-
-    def getConfiguration(self):
-        return self._rpc.request('TimeTaggerVirtual.getConfiguration', [self._handle])
-
-    def getRegistrations(self, channel):
-        return self._rpc.request('TimeTaggerVirtual.getRegistrations', [self._handle, channel])
-
-    def isChannelRegistered(self, channel):
-        return self._rpc.request('TimeTaggerVirtual.isChannelRegistered', [self._handle, channel])
-
-    def xtra_setAutoStart(self, auto_start):
-        self._rpc.request('TimeTaggerVirtual.xtra_setAutoStart', [self._handle, auto_start])
-
-    def xtra_getAutoStart(self):
-        return self._rpc.request('TimeTaggerVirtual.xtra_getAutoStart', [self._handle])
-
-    def sync(self, timeout=-1):
-        self._rpc.request('TimeTaggerVirtual.sync', [self._handle, timeout])
-
-    def waitForFence(self, fence, timeout=-1):
-        self._rpc.request('TimeTaggerVirtual.waitForFence', [self._handle, fence, timeout])
 
     def run(self, speed=-1.0):
         return self._rpc.request('TimeTaggerVirtual.run', [self._handle, speed])
@@ -343,223 +484,33 @@ class TimeTaggerVirtual:
 
 
 @remote
+class TimeTaggerServer:
+
+    _rpc: _Connection # this is injected by the @remote decorator
+
+    def __init__(self,  *args):
+        self._handle = self._rpc.request('TimeTaggerServer',
+                            [getattr(a, '_handle', a) for a in args])
+
+    def getAddress(self):
+        return self._rpc.request('TimeTaggerServer.getAddress', [self._handle])
+
+    def getAccessMode(self) -> AccessMode:
+        handle = self._rpc.request('TimeTaggerServer.getAccessMode', [self._handle])
+        return AccessMode(handle)
+
+    def getClientChannel(self, server_channel):
+        return self._rpc.request('TimeTaggerServer.getClientChannel', [self._handle, server_channel])
+
+
+@remote
 class TimeTaggerNetwork:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
     """Server-side data object. Obtained via getDataObject() / getData()."""
-    def __init__(self, _rpc: _Connection, _handle: int):
-        self._rpc = _rpc
+    def __init__(self, _handle: int):
         self._handle = _handle
-
-    def setInputDelay(self, channel, delay):
-        self._rpc.request('TimeTaggerNetwork.setInputDelay', [self._handle, channel, delay])
-
-    def getInputDelay(self, channel):
-        return self._rpc.request('TimeTaggerNetwork.getInputDelay', [self._handle, channel])
-
-    def setDelayHardware(self, channel, delay):
-        self._rpc.request('TimeTaggerNetwork.setDelayHardware', [self._handle, channel, delay])
-
-    def getDelayHardware(self, channel):
-        return self._rpc.request('TimeTaggerNetwork.getDelayHardware', [self._handle, channel])
-
-    def getDelayHardwareRange(self, channel):
-        return self._rpc.request('TimeTaggerNetwork.getDelayHardwareRange', [self._handle, channel])
-
-    def setDelaySoftware(self, channel, delay):
-        self._rpc.request('TimeTaggerNetwork.setDelaySoftware', [self._handle, channel, delay])
-
-    def getDelaySoftware(self, channel):
-        return self._rpc.request('TimeTaggerNetwork.getDelaySoftware', [self._handle, channel])
-
-    def setDeadtime(self, channel, deadtime):
-        return self._rpc.request('TimeTaggerNetwork.setDeadtime', [self._handle, channel, deadtime])
-
-    def getDeadtime(self, channel):
-        return self._rpc.request('TimeTaggerNetwork.getDeadtime', [self._handle, channel])
-
-    def getDeadtimeRange(self, channel):
-        return self._rpc.request('TimeTaggerNetwork.getDeadtimeRange', [self._handle, channel])
-
-    def setConditionalFilter(self, trigger, filtered):
-        self._rpc.request('TimeTaggerNetwork.setConditionalFilter', [self._handle, trigger, filtered])
-
-    def clearConditionalFilter(self):
-        self._rpc.request('TimeTaggerNetwork.clearConditionalFilter', [self._handle])
-
-    def getConditionalFilterTrigger(self):
-        return self._rpc.request('TimeTaggerNetwork.getConditionalFilterTrigger', [self._handle])
-
-    def getConditionalFilterFiltered(self):
-        return self._rpc.request('TimeTaggerNetwork.getConditionalFilterFiltered', [self._handle])
-
-    def setEventDivider(self, channel, divider):
-        self._rpc.request('TimeTaggerNetwork.setEventDivider', [self._handle, channel, divider])
-
-    def getEventDivider(self, channel):
-        return self._rpc.request('TimeTaggerNetwork.getEventDivider', [self._handle, channel])
-
-    def getOverflows(self):
-        return self._rpc.request('TimeTaggerNetwork.getOverflows', [self._handle])
-
-    def getOverflowsAndClear(self):
-        return self._rpc.request('TimeTaggerNetwork.getOverflowsAndClear', [self._handle])
-
-    def clearOverflows(self):
-        self._rpc.request('TimeTaggerNetwork.clearOverflows', [self._handle])
-
-    def setReferenceClock(self, *args):
-        self._rpc.request('TimeTaggerNetwork.setReferenceClock', [self._handle, *args])
-
-    def disableReferenceClock(self):
-        self._rpc.request('TimeTaggerNetwork.disableReferenceClock', [self._handle])
-
-    def getReferenceClockState(self) -> ReferenceClockState:
-        handle = self._rpc.request('TimeTaggerNetwork.getReferenceClockState', [self._handle])
-        return ReferenceClockState(self._rpc, handle)
-
-    def setSoftwareClock(self, input_channel, input_frequency=10000000.0, averaging_periods=1000, wait_until_locked=True):
-        self._rpc.request('TimeTaggerNetwork.setSoftwareClock', [self._handle, input_channel, input_frequency, averaging_periods, wait_until_locked])
-
-    def disableSoftwareClock(self):
-        self._rpc.request('TimeTaggerNetwork.disableSoftwareClock', [self._handle])
-
-    def getSoftwareClockState(self) -> SoftwareClockState:
-        handle = self._rpc.request('TimeTaggerNetwork.getSoftwareClockState', [self._handle])
-        return SoftwareClockState(self._rpc, handle)
-
-    def getFence(self, alloc_fence=True):
-        return self._rpc.request('TimeTaggerNetwork.getFence', [self._handle, alloc_fence])
-
-    def getInvertedChannel(self, channel):
-        return self._rpc.request('TimeTaggerNetwork.getInvertedChannel', [self._handle, channel])
-
-    def isUnusedChannel(self, channel):
-        return self._rpc.request('TimeTaggerNetwork.isUnusedChannel', [self._handle, channel])
-
-    def getConfiguration(self):
-        return self._rpc.request('TimeTaggerNetwork.getConfiguration', [self._handle])
-
-    def getRegistrations(self, channel):
-        return self._rpc.request('TimeTaggerNetwork.getRegistrations', [self._handle, channel])
-
-    def isChannelRegistered(self, channel):
-        return self._rpc.request('TimeTaggerNetwork.isChannelRegistered', [self._handle, channel])
-
-    def xtra_setAutoStart(self, auto_start):
-        self._rpc.request('TimeTaggerNetwork.xtra_setAutoStart', [self._handle, auto_start])
-
-    def xtra_getAutoStart(self):
-        return self._rpc.request('TimeTaggerNetwork.xtra_getAutoStart', [self._handle])
-
-    def sync(self, timeout=-1):
-        self._rpc.request('TimeTaggerNetwork.sync', [self._handle, timeout])
-
-    def waitForFence(self, fence, timeout=-1):
-        self._rpc.request('TimeTaggerNetwork.waitForFence', [self._handle, fence, timeout])
-
-    def setTriggerLevel(self, channel, voltage):
-        self._rpc.request('TimeTaggerNetwork.setTriggerLevel', [self._handle, channel, voltage])
-
-    def getTriggerLevel(self, channel):
-        return self._rpc.request('TimeTaggerNetwork.getTriggerLevel', [self._handle, channel])
-
-    def getHardwareDelayCompensation(self, channel):
-        return self._rpc.request('TimeTaggerNetwork.getHardwareDelayCompensation', [self._handle, channel])
-
-    def setHardwareDelayCompensationActive(self, use_compensation):
-        self._rpc.request('TimeTaggerNetwork.setHardwareDelayCompensationActive', [self._handle, use_compensation])
-
-    def setInputImpedanceHigh(self, channel, high_impedance):
-        self._rpc.request('TimeTaggerNetwork.setInputImpedanceHigh', [self._handle, channel, high_impedance])
-
-    def getInputImpedanceHigh(self, channel):
-        return self._rpc.request('TimeTaggerNetwork.getInputImpedanceHigh', [self._handle, channel])
-
-    def setInputHysteresis(self, channel, value):
-        self._rpc.request('TimeTaggerNetwork.setInputHysteresis', [self._handle, channel, value])
-
-    def getInputHysteresis(self, channel):
-        return self._rpc.request('TimeTaggerNetwork.getInputHysteresis', [self._handle, channel])
-
-    def setNormalization(self, channels, state):
-        self._rpc.request('TimeTaggerNetwork.setNormalization', [self._handle, channels, state])
-
-    def getNormalization(self, channel):
-        return self._rpc.request('TimeTaggerNetwork.getNormalization', [self._handle, channel])
-
-    def getSerial(self):
-        return self._rpc.request('TimeTaggerNetwork.getSerial', [self._handle])
-
-    def getModel(self):
-        return self._rpc.request('TimeTaggerNetwork.getModel', [self._handle])
-
-    def getPcbVersion(self):
-        return self._rpc.request('TimeTaggerNetwork.getPcbVersion', [self._handle])
-
-    def getFirmwareVersion(self):
-        return self._rpc.request('TimeTaggerNetwork.getFirmwareVersion', [self._handle])
-
-    def getDACRange(self):
-        return self._rpc.request('TimeTaggerNetwork.getDACRange', [self._handle])
-
-    def getTriggerLevelRange(self, channel):
-        return self._rpc.request('TimeTaggerNetwork.getTriggerLevelRange', [self._handle, channel])
-
-    def getChannelList(self, *args):
-        return self._rpc.request('TimeTaggerNetwork.getChannelList', [self._handle, *args])
-
-    def setHardwareBufferSize(self, size):
-        self._rpc.request('TimeTaggerNetwork.setHardwareBufferSize', [self._handle, size])
-
-    def getHardwareBufferSize(self):
-        return self._rpc.request('TimeTaggerNetwork.getHardwareBufferSize', [self._handle])
-
-    def getPsPerClock(self):
-        return self._rpc.request('TimeTaggerNetwork.getPsPerClock', [self._handle])
-
-    def setStreamBlockSize(self, max_events, max_latency):
-        self._rpc.request('TimeTaggerNetwork.setStreamBlockSize', [self._handle, max_events, max_latency])
-
-    def getStreamBlockSizeEvents(self):
-        return self._rpc.request('TimeTaggerNetwork.getStreamBlockSizeEvents', [self._handle])
-
-    def getStreamBlockSizeLatency(self):
-        return self._rpc.request('TimeTaggerNetwork.getStreamBlockSizeLatency', [self._handle])
-
-    def setTestSignal(self, *args):
-        self._rpc.request('TimeTaggerNetwork.setTestSignal', [self._handle, *args])
-
-    def getTestSignal(self, channel):
-        return self._rpc.request('TimeTaggerNetwork.getTestSignal', [self._handle, channel])
-
-    def setTestSignalDivider(self, divider):
-        self._rpc.request('TimeTaggerNetwork.setTestSignalDivider', [self._handle, divider])
-
-    def getTestSignalDivider(self):
-        return self._rpc.request('TimeTaggerNetwork.getTestSignalDivider', [self._handle])
-
-    def getDeviceLicense(self):
-        return self._rpc.request('TimeTaggerNetwork.getDeviceLicense', [self._handle])
-
-    def getSensorData(self):
-        return self._rpc.request('TimeTaggerNetwork.getSensorData', [self._handle])
-
-    def disableLEDs(self, disabled):
-        self._rpc.request('TimeTaggerNetwork.disableLEDs', [self._handle, disabled])
-
-    def setLED(self, bitmask):
-        self._rpc.request('TimeTaggerNetwork.setLED', [self._handle, bitmask])
-
-    def setSoundFrequency(self, freq_hz):
-        self._rpc.request('TimeTaggerNetwork.setSoundFrequency', [self._handle, freq_hz])
-
-    def setTimeTaggerNetworkStreamCompression(self, active):
-        self._rpc.request('TimeTaggerNetwork.setTimeTaggerNetworkStreamCompression', [self._handle, active])
-
-    def getChannelNumberScheme(self):
-        return self._rpc.request('TimeTaggerNetwork.getChannelNumberScheme', [self._handle])
 
     def isConnected(self):
         return self._rpc.request('TimeTaggerNetwork.isConnected', [self._handle])
@@ -581,11 +532,11 @@ class TimeTaggerNetwork:
 
     def getServer(self, ip_address) -> TimeTaggerServer:
         handle = self._rpc.request('TimeTaggerNetwork.getServer', [self._handle, ip_address])
-        return TimeTaggerServer(self._rpc, handle)
+        return TimeTaggerServer(handle)
 
     def getServers(self) -> TimeTaggerServer:
         handle = self._rpc.request('TimeTaggerNetwork.getServers', [self._handle])
-        return TimeTaggerServer(self._rpc, handle)
+        return TimeTaggerServer(handle)
 
 
 @remote
@@ -594,218 +545,8 @@ class TimeTagger:
     _rpc: _Connection # this is injected by the @remote decorator
 
     """Server-side data object. Obtained via getDataObject() / getData()."""
-    def __init__(self, _rpc: _Connection, _handle: int):
-        self._rpc = _rpc
+    def __init__(self, _handle: int):
         self._handle = _handle
-
-    def setInputDelay(self, channel, delay):
-        self._rpc.request('TimeTagger.setInputDelay', [self._handle, channel, delay])
-
-    def getInputDelay(self, channel):
-        return self._rpc.request('TimeTagger.getInputDelay', [self._handle, channel])
-
-    def setDelayHardware(self, channel, delay):
-        self._rpc.request('TimeTagger.setDelayHardware', [self._handle, channel, delay])
-
-    def getDelayHardware(self, channel):
-        return self._rpc.request('TimeTagger.getDelayHardware', [self._handle, channel])
-
-    def getDelayHardwareRange(self, channel):
-        return self._rpc.request('TimeTagger.getDelayHardwareRange', [self._handle, channel])
-
-    def setDelaySoftware(self, channel, delay):
-        self._rpc.request('TimeTagger.setDelaySoftware', [self._handle, channel, delay])
-
-    def getDelaySoftware(self, channel):
-        return self._rpc.request('TimeTagger.getDelaySoftware', [self._handle, channel])
-
-    def setDeadtime(self, channel, deadtime):
-        return self._rpc.request('TimeTagger.setDeadtime', [self._handle, channel, deadtime])
-
-    def getDeadtime(self, channel):
-        return self._rpc.request('TimeTagger.getDeadtime', [self._handle, channel])
-
-    def getDeadtimeRange(self, channel):
-        return self._rpc.request('TimeTagger.getDeadtimeRange', [self._handle, channel])
-
-    def setConditionalFilter(self, trigger, filtered):
-        self._rpc.request('TimeTagger.setConditionalFilter', [self._handle, trigger, filtered])
-
-    def clearConditionalFilter(self):
-        self._rpc.request('TimeTagger.clearConditionalFilter', [self._handle])
-
-    def getConditionalFilterTrigger(self):
-        return self._rpc.request('TimeTagger.getConditionalFilterTrigger', [self._handle])
-
-    def getConditionalFilterFiltered(self):
-        return self._rpc.request('TimeTagger.getConditionalFilterFiltered', [self._handle])
-
-    def setEventDivider(self, channel, divider):
-        self._rpc.request('TimeTagger.setEventDivider', [self._handle, channel, divider])
-
-    def getEventDivider(self, channel):
-        return self._rpc.request('TimeTagger.getEventDivider', [self._handle, channel])
-
-    def getOverflows(self):
-        return self._rpc.request('TimeTagger.getOverflows', [self._handle])
-
-    def getOverflowsAndClear(self):
-        return self._rpc.request('TimeTagger.getOverflowsAndClear', [self._handle])
-
-    def clearOverflows(self):
-        self._rpc.request('TimeTagger.clearOverflows', [self._handle])
-
-    def setReferenceClock(self, *args):
-        self._rpc.request('TimeTagger.setReferenceClock', [self._handle, *args])
-
-    def disableReferenceClock(self):
-        self._rpc.request('TimeTagger.disableReferenceClock', [self._handle])
-
-    def getReferenceClockState(self) -> ReferenceClockState:
-        handle = self._rpc.request('TimeTagger.getReferenceClockState', [self._handle])
-        return ReferenceClockState(self._rpc, handle)
-
-    def setSoftwareClock(self, input_channel, input_frequency=10000000.0, averaging_periods=1000, wait_until_locked=True):
-        self._rpc.request('TimeTagger.setSoftwareClock', [self._handle, input_channel, input_frequency, averaging_periods, wait_until_locked])
-
-    def disableSoftwareClock(self):
-        self._rpc.request('TimeTagger.disableSoftwareClock', [self._handle])
-
-    def getSoftwareClockState(self) -> SoftwareClockState:
-        handle = self._rpc.request('TimeTagger.getSoftwareClockState', [self._handle])
-        return SoftwareClockState(self._rpc, handle)
-
-    def getFence(self, alloc_fence=True):
-        return self._rpc.request('TimeTagger.getFence', [self._handle, alloc_fence])
-
-    def getInvertedChannel(self, channel):
-        return self._rpc.request('TimeTagger.getInvertedChannel', [self._handle, channel])
-
-    def isUnusedChannel(self, channel):
-        return self._rpc.request('TimeTagger.isUnusedChannel', [self._handle, channel])
-
-    def getConfiguration(self):
-        return self._rpc.request('TimeTagger.getConfiguration', [self._handle])
-
-    def getRegistrations(self, channel):
-        return self._rpc.request('TimeTagger.getRegistrations', [self._handle, channel])
-
-    def isChannelRegistered(self, channel):
-        return self._rpc.request('TimeTagger.isChannelRegistered', [self._handle, channel])
-
-    def xtra_setAutoStart(self, auto_start):
-        self._rpc.request('TimeTagger.xtra_setAutoStart', [self._handle, auto_start])
-
-    def xtra_getAutoStart(self):
-        return self._rpc.request('TimeTagger.xtra_getAutoStart', [self._handle])
-
-    def sync(self, timeout=-1):
-        self._rpc.request('TimeTagger.sync', [self._handle, timeout])
-
-    def waitForFence(self, fence, timeout=-1):
-        self._rpc.request('TimeTagger.waitForFence', [self._handle, fence, timeout])
-
-    def setTriggerLevel(self, channel, voltage):
-        self._rpc.request('TimeTagger.setTriggerLevel', [self._handle, channel, voltage])
-
-    def getTriggerLevel(self, channel):
-        return self._rpc.request('TimeTagger.getTriggerLevel', [self._handle, channel])
-
-    def getHardwareDelayCompensation(self, channel):
-        return self._rpc.request('TimeTagger.getHardwareDelayCompensation', [self._handle, channel])
-
-    def setHardwareDelayCompensationActive(self, use_compensation):
-        self._rpc.request('TimeTagger.setHardwareDelayCompensationActive', [self._handle, use_compensation])
-
-    def setInputImpedanceHigh(self, channel, high_impedance):
-        self._rpc.request('TimeTagger.setInputImpedanceHigh', [self._handle, channel, high_impedance])
-
-    def getInputImpedanceHigh(self, channel):
-        return self._rpc.request('TimeTagger.getInputImpedanceHigh', [self._handle, channel])
-
-    def setInputHysteresis(self, channel, value):
-        self._rpc.request('TimeTagger.setInputHysteresis', [self._handle, channel, value])
-
-    def getInputHysteresis(self, channel):
-        return self._rpc.request('TimeTagger.getInputHysteresis', [self._handle, channel])
-
-    def setNormalization(self, channels, state):
-        self._rpc.request('TimeTagger.setNormalization', [self._handle, channels, state])
-
-    def getNormalization(self, channel):
-        return self._rpc.request('TimeTagger.getNormalization', [self._handle, channel])
-
-    def getSerial(self):
-        return self._rpc.request('TimeTagger.getSerial', [self._handle])
-
-    def getModel(self):
-        return self._rpc.request('TimeTagger.getModel', [self._handle])
-
-    def getPcbVersion(self):
-        return self._rpc.request('TimeTagger.getPcbVersion', [self._handle])
-
-    def getFirmwareVersion(self):
-        return self._rpc.request('TimeTagger.getFirmwareVersion', [self._handle])
-
-    def getDACRange(self):
-        return self._rpc.request('TimeTagger.getDACRange', [self._handle])
-
-    def getTriggerLevelRange(self, channel):
-        return self._rpc.request('TimeTagger.getTriggerLevelRange', [self._handle, channel])
-
-    def getChannelList(self, *args):
-        return self._rpc.request('TimeTagger.getChannelList', [self._handle, *args])
-
-    def setHardwareBufferSize(self, size):
-        self._rpc.request('TimeTagger.setHardwareBufferSize', [self._handle, size])
-
-    def getHardwareBufferSize(self):
-        return self._rpc.request('TimeTagger.getHardwareBufferSize', [self._handle])
-
-    def getPsPerClock(self):
-        return self._rpc.request('TimeTagger.getPsPerClock', [self._handle])
-
-    def setStreamBlockSize(self, max_events, max_latency):
-        self._rpc.request('TimeTagger.setStreamBlockSize', [self._handle, max_events, max_latency])
-
-    def getStreamBlockSizeEvents(self):
-        return self._rpc.request('TimeTagger.getStreamBlockSizeEvents', [self._handle])
-
-    def getStreamBlockSizeLatency(self):
-        return self._rpc.request('TimeTagger.getStreamBlockSizeLatency', [self._handle])
-
-    def setTestSignal(self, *args):
-        self._rpc.request('TimeTagger.setTestSignal', [self._handle, *args])
-
-    def getTestSignal(self, channel):
-        return self._rpc.request('TimeTagger.getTestSignal', [self._handle, channel])
-
-    def setTestSignalDivider(self, divider):
-        self._rpc.request('TimeTagger.setTestSignalDivider', [self._handle, divider])
-
-    def getTestSignalDivider(self):
-        return self._rpc.request('TimeTagger.getTestSignalDivider', [self._handle])
-
-    def getDeviceLicense(self):
-        return self._rpc.request('TimeTagger.getDeviceLicense', [self._handle])
-
-    def getSensorData(self):
-        return self._rpc.request('TimeTagger.getSensorData', [self._handle])
-
-    def disableLEDs(self, disabled):
-        self._rpc.request('TimeTagger.disableLEDs', [self._handle, disabled])
-
-    def setLED(self, bitmask):
-        self._rpc.request('TimeTagger.setLED', [self._handle, bitmask])
-
-    def setSoundFrequency(self, freq_hz):
-        self._rpc.request('TimeTagger.setSoundFrequency', [self._handle, freq_hz])
-
-    def setTimeTaggerNetworkStreamCompression(self, active):
-        self._rpc.request('TimeTagger.setTimeTaggerNetworkStreamCompression', [self._handle, active])
-
-    def getChannelNumberScheme(self):
-        return self._rpc.request('TimeTagger.getChannelNumberScheme', [self._handle])
 
     def reset(self):
         self._rpc.request('TimeTagger.reset', [self._handle])
@@ -929,30 +670,6 @@ class Coincidences:
         self._handle = self._rpc.request('Coincidences',
                             [getattr(a, '_handle', a) for a in args])
 
-    def clear(self):
-        self._rpc.request('Coincidences.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Coincidences.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Coincidences.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Coincidences.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Coincidences.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Coincidences.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Coincidences.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Coincidences.getConfiguration', [self._handle])
-
     def getChannels(self):
         return self._rpc.request('Coincidences.getChannels', [self._handle])
 
@@ -981,30 +698,6 @@ class Combinations:
     def __init__(self, _rpc: _Connection, tagger, channels, window_size):
         self._handle = self._rpc.request('Combinations', [tagger._handle, channels, window_size])
 
-    def clear(self):
-        self._rpc.request('Combinations.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Combinations.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Combinations.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Combinations.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Combinations.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Combinations.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Combinations.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Combinations.getConfiguration', [self._handle])
-
     def getChannel(self, input_channels):
         return self._rpc.request('Combinations.getChannel', [self._handle, input_channels])
 
@@ -1029,30 +722,6 @@ class Combiner:
     def __init__(self, _rpc: _Connection, tagger, channels):
         self._handle = self._rpc.request('Combiner', [tagger._handle, channels])
 
-    def clear(self):
-        self._rpc.request('Combiner.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Combiner.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Combiner.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Combiner.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Combiner.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Combiner.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Combiner.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Combiner.getConfiguration', [self._handle])
-
     def getChannelCounts(self):
         return _unpack_ndarray(self._rpc.request('Combiner.getChannelCounts', [self._handle]))
 
@@ -1072,30 +741,6 @@ class ConditionalFilterChannel:
         self._handle = self._rpc.request('ConditionalFilterChannel',
                             [getattr(a, '_handle', a) for a in args])
 
-    def clear(self):
-        self._rpc.request('ConditionalFilterChannel.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('ConditionalFilterChannel.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('ConditionalFilterChannel.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('ConditionalFilterChannel.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('ConditionalFilterChannel.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('ConditionalFilterChannel.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('ConditionalFilterChannel.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('ConditionalFilterChannel.getConfiguration', [self._handle])
-
     def getChannel(self):
         return self._rpc.request('ConditionalFilterChannel.getChannel', [self._handle])
 
@@ -1111,30 +756,6 @@ class ConstantFractionDiscriminator:
     def __init__(self, _rpc: _Connection, tagger, channels, search_window):
         self._handle = self._rpc.request('ConstantFractionDiscriminator', [tagger._handle, channels, search_window])
 
-    def clear(self):
-        self._rpc.request('ConstantFractionDiscriminator.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('ConstantFractionDiscriminator.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('ConstantFractionDiscriminator.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('ConstantFractionDiscriminator.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('ConstantFractionDiscriminator.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('ConstantFractionDiscriminator.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('ConstantFractionDiscriminator.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('ConstantFractionDiscriminator.getConfiguration', [self._handle])
-
     def getChannels(self):
         return self._rpc.request('ConstantFractionDiscriminator.getChannels', [self._handle])
 
@@ -1147,30 +768,6 @@ class Correlation:
     def __init__(self,  *args):
         self._handle = self._rpc.request('Correlation',
                             [getattr(a, '_handle', a) for a in args])
-
-    def clear(self):
-        self._rpc.request('Correlation.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Correlation.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Correlation.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Correlation.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Correlation.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Correlation.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Correlation.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Correlation.getConfiguration', [self._handle])
 
     def getData(self):
         return _unpack_ndarray(self._rpc.request('Correlation.getData', [self._handle]))
@@ -1188,8 +785,7 @@ class CorrelationPairsData:
     _rpc: _Connection # this is injected by the @remote decorator
 
     """Server-side data object. Obtained via getDataObject() / getData()."""
-    def __init__(self, _rpc: _Connection, _handle: int):
-        self._rpc = _rpc
+    def __init__(self, _handle: int):
         self._handle = _handle
 
     def getCounts(self, exclude_self_coincidences=True):
@@ -1213,33 +809,9 @@ class CorrelationPairs:
     def __init__(self, _rpc: _Connection, tagger, channels, binwidth=1000, n_bins=1000):
         self._handle = self._rpc.request('CorrelationPairs', [tagger._handle, channels, binwidth, n_bins])
 
-    def clear(self):
-        self._rpc.request('CorrelationPairs.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('CorrelationPairs.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('CorrelationPairs.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('CorrelationPairs.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('CorrelationPairs.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('CorrelationPairs.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('CorrelationPairs.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('CorrelationPairs.getConfiguration', [self._handle])
-
     def getDataObject(self) -> CorrelationPairsData:
         handle = self._rpc.request('CorrelationPairs.getDataObject', [self._handle])
-        return CorrelationPairsData(self._rpc, handle)
+        return CorrelationPairsData(handle)
 
     def getIndex(self):
         return _unpack_ndarray(self._rpc.request('CorrelationPairs.getIndex', [self._handle]))
@@ -1253,30 +825,6 @@ class CountBetweenMarkers:
     def __init__(self,  *args):
         self._handle = self._rpc.request('CountBetweenMarkers',
                             [getattr(a, '_handle', a) for a in args])
-
-    def clear(self):
-        self._rpc.request('CountBetweenMarkers.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('CountBetweenMarkers.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('CountBetweenMarkers.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('CountBetweenMarkers.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('CountBetweenMarkers.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('CountBetweenMarkers.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('CountBetweenMarkers.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('CountBetweenMarkers.getConfiguration', [self._handle])
 
     def getData(self):
         return _unpack_ndarray(self._rpc.request('CountBetweenMarkers.getData', [self._handle]))
@@ -1297,8 +845,7 @@ class CounterData:
     _rpc: _Connection # this is injected by the @remote decorator
 
     """Server-side data object. Obtained via getDataObject() / getData()."""
-    def __init__(self, _rpc: _Connection, _handle: int):
-        self._rpc = _rpc
+    def __init__(self, _handle: int):
         self._handle = _handle
 
     def getIndex(self):
@@ -1346,30 +893,6 @@ class Counter:
     def __init__(self, _rpc: _Connection, tagger, channels, binwidth=1000000000, n_values=1):
         self._handle = self._rpc.request('Counter', [tagger._handle, channels, binwidth, n_values])
 
-    def clear(self):
-        self._rpc.request('Counter.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Counter.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Counter.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Counter.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Counter.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Counter.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Counter.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Counter.getConfiguration', [self._handle])
-
     def getData(self, rolling=True):
         return _unpack_ndarray(self._rpc.request('Counter.getData', [self._handle, rolling]))
 
@@ -1384,7 +907,7 @@ class Counter:
 
     def getDataObject(self, remove=False) -> CounterData:
         handle = self._rpc.request('Counter.getDataObject', [self._handle, remove])
-        return CounterData(self._rpc, handle)
+        return CounterData(handle)
 
 
 @remote
@@ -1394,30 +917,6 @@ class Countrate:
 
     def __init__(self, _rpc: _Connection, tagger, channels):
         self._handle = self._rpc.request('Countrate', [tagger._handle, channels])
-
-    def clear(self):
-        self._rpc.request('Countrate.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Countrate.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Countrate.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Countrate.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Countrate.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Countrate.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Countrate.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Countrate.getConfiguration', [self._handle])
 
     def getData(self):
         return _unpack_ndarray(self._rpc.request('Countrate.getData', [self._handle]))
@@ -1433,30 +932,6 @@ class DelayedChannels:
 
     def __init__(self, _rpc: _Connection, tagger, input_channels, delay):
         self._handle = self._rpc.request('DelayedChannels', [tagger._handle, input_channels, delay])
-
-    def clear(self):
-        self._rpc.request('DelayedChannels.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('DelayedChannels.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('DelayedChannels.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('DelayedChannels.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('DelayedChannels.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('DelayedChannels.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('DelayedChannels.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('DelayedChannels.getConfiguration', [self._handle])
 
     def getChannels(self):
         return self._rpc.request('DelayedChannels.getChannels', [self._handle])
@@ -1486,30 +961,6 @@ class Dump:
         self._handle = self._rpc.request('Dump',
                             [getattr(a, '_handle', a) for a in args])
 
-    def clear(self):
-        self._rpc.request('Dump.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Dump.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Dump.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Dump.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Dump.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Dump.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Dump.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Dump.getConfiguration', [self._handle])
-
 
 @remote
 class EventGenerator:
@@ -1519,30 +970,6 @@ class EventGenerator:
     def __init__(self,  *args):
         self._handle = self._rpc.request('EventGenerator',
                             [getattr(a, '_handle', a) for a in args])
-
-    def clear(self):
-        self._rpc.request('EventGenerator.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('EventGenerator.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('EventGenerator.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('EventGenerator.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('EventGenerator.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('EventGenerator.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('EventGenerator.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('EventGenerator.getConfiguration', [self._handle])
 
     def getChannel(self):
         return self._rpc.request('EventGenerator.getChannel', [self._handle])
@@ -1559,7 +986,7 @@ class FileReader:
 
     def getData(self, n_events) -> TimeTagStreamBuffer:
         handle = self._rpc.request('FileReader.getData', [self._handle, n_events])
-        return TimeTagStreamBuffer(self._rpc, handle)
+        return TimeTagStreamBuffer(handle)
 
     def hasData(self):
         return self._rpc.request('FileReader.hasData', [self._handle])
@@ -1581,30 +1008,6 @@ class FileWriter:
 
     def __init__(self, _rpc: _Connection, tagger, filename, channels):
         self._handle = self._rpc.request('FileWriter', [tagger._handle, filename, channels])
-
-    def clear(self):
-        self._rpc.request('FileWriter.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('FileWriter.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('FileWriter.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('FileWriter.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('FileWriter.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('FileWriter.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('FileWriter.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('FileWriter.getConfiguration', [self._handle])
 
     def split(self, *args):
         self._rpc.request('FileWriter.split', [self._handle, *args])
@@ -1631,8 +1034,7 @@ class FlimFrameInfo:
     _rpc: _Connection # this is injected by the @remote decorator
 
     """Server-side data object. Obtained via getDataObject() / getData()."""
-    def __init__(self, _rpc: _Connection, _handle: int):
-        self._rpc = _rpc
+    def __init__(self, _handle: int):
         self._handle = _handle
 
     def getFrameNumber(self):
@@ -1692,7 +1094,7 @@ class Flim:
 
     def getCurrentFrameEx(self) -> FlimFrameInfo:
         handle = self._rpc.request('Flim.getCurrentFrameEx', [self._handle])
-        return FlimFrameInfo(self._rpc, handle)
+        return FlimFrameInfo(handle)
 
     def getCurrentFrameIntensity(self):
         return _unpack_ndarray(self._rpc.request('Flim.getCurrentFrameIntensity', [self._handle]))
@@ -1708,7 +1110,7 @@ class Flim:
 
     def getReadyFrameEx(self, index=-1) -> FlimFrameInfo:
         handle = self._rpc.request('Flim.getReadyFrameEx', [self._handle, index])
-        return FlimFrameInfo(self._rpc, handle)
+        return FlimFrameInfo(handle)
 
     def getReadyFrameIntensity(self, index=-1):
         return _unpack_ndarray(self._rpc.request('Flim.getReadyFrameIntensity', [self._handle, index]))
@@ -1718,7 +1120,7 @@ class Flim:
 
     def getSummedFramesEx(self, only_ready_frames=True, clear_summed=False) -> FlimFrameInfo:
         handle = self._rpc.request('Flim.getSummedFramesEx', [self._handle, only_ready_frames, clear_summed])
-        return FlimFrameInfo(self._rpc, handle)
+        return FlimFrameInfo(handle)
 
     def getSummedFramesIntensity(self, only_ready_frames=True, clear_summed=False):
         return _unpack_ndarray(self._rpc.request('Flim.getSummedFramesIntensity', [self._handle, only_ready_frames, clear_summed]))
@@ -1736,8 +1138,7 @@ class FrequencyCounterData:
     _rpc: _Connection # this is injected by the @remote decorator
 
     """Server-side data object. Obtained via getDataObject() / getData()."""
-    def __init__(self, _rpc: _Connection, _handle: int):
-        self._rpc = _rpc
+    def __init__(self, _handle: int):
         self._handle = _handle
 
     def getIndex(self):
@@ -1794,33 +1195,9 @@ class FrequencyCounter:
     def __init__(self, _rpc: _Connection, tagger, channels, sampling_interval, fitting_window, n_values=0):
         self._handle = self._rpc.request('FrequencyCounter', [tagger._handle, channels, sampling_interval, fitting_window, n_values])
 
-    def clear(self):
-        self._rpc.request('FrequencyCounter.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('FrequencyCounter.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('FrequencyCounter.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('FrequencyCounter.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('FrequencyCounter.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('FrequencyCounter.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('FrequencyCounter.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('FrequencyCounter.getConfiguration', [self._handle])
-
     def getDataObject(self, event_divider=1, remove=False, channels_last_dim=False) -> FrequencyCounterData:
         handle = self._rpc.request('FrequencyCounter.getDataObject', [self._handle, event_divider, remove, channels_last_dim])
-        return FrequencyCounterData(self._rpc, handle)
+        return FrequencyCounterData(handle)
 
 
 @remote
@@ -1830,30 +1207,6 @@ class FrequencyMultiplier:
 
     def __init__(self, _rpc: _Connection, tagger, input_channel, multiplier):
         self._handle = self._rpc.request('FrequencyMultiplier', [tagger._handle, input_channel, multiplier])
-
-    def clear(self):
-        self._rpc.request('FrequencyMultiplier.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('FrequencyMultiplier.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('FrequencyMultiplier.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('FrequencyMultiplier.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('FrequencyMultiplier.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('FrequencyMultiplier.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('FrequencyMultiplier.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('FrequencyMultiplier.getConfiguration', [self._handle])
 
     def getChannel(self):
         return self._rpc.request('FrequencyMultiplier.getChannel', [self._handle])
@@ -1868,8 +1221,7 @@ class FrequencyStabilityData:
     _rpc: _Connection # this is injected by the @remote decorator
 
     """Server-side data object. Obtained via getDataObject() / getData()."""
-    def __init__(self, _rpc: _Connection, _handle: int):
-        self._rpc = _rpc
+    def __init__(self, _handle: int):
         self._handle = _handle
 
     def getTau(self):
@@ -1920,33 +1272,9 @@ class FrequencyStability:
     def __init__(self, _rpc: _Connection, tagger, channel, steps, average=1000, trace_len=1000):
         self._handle = self._rpc.request('FrequencyStability', [tagger._handle, channel, steps, average, trace_len])
 
-    def clear(self):
-        self._rpc.request('FrequencyStability.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('FrequencyStability.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('FrequencyStability.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('FrequencyStability.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('FrequencyStability.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('FrequencyStability.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('FrequencyStability.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('FrequencyStability.getConfiguration', [self._handle])
-
     def getDataObject(self) -> FrequencyStabilityData:
         handle = self._rpc.request('FrequencyStability.getDataObject', [self._handle])
-        return FrequencyStabilityData(self._rpc, handle)
+        return FrequencyStabilityData(handle)
 
 
 @remote
@@ -1958,30 +1286,6 @@ class GatedChannel:
         self._handle = self._rpc.request('GatedChannel',
                             [getattr(a, '_handle', a) for a in args])
 
-    def clear(self):
-        self._rpc.request('GatedChannel.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('GatedChannel.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('GatedChannel.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('GatedChannel.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('GatedChannel.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('GatedChannel.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('GatedChannel.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('GatedChannel.getConfiguration', [self._handle])
-
     def getChannel(self):
         return self._rpc.request('GatedChannel.getChannel', [self._handle])
 
@@ -1992,8 +1296,7 @@ class HistogramLogBinsData:
     _rpc: _Connection # this is injected by the @remote decorator
 
     """Server-side data object. Obtained via getDataObject() / getData()."""
-    def __init__(self, _rpc: _Connection, _handle: int):
-        self._rpc = _rpc
+    def __init__(self, _handle: int):
         self._handle = _handle
 
     def getG2(self):
@@ -2023,33 +1326,9 @@ class HistogramLogBins:
     def __init__(self, _rpc: _Connection, tagger, click_channel, start_channel, exp_start, exp_stop, n_bins, click_gate=None, start_gate=None):
         self._handle = self._rpc.request('HistogramLogBins', [tagger._handle, click_channel, start_channel, exp_start, exp_stop, n_bins, click_gate._handle, start_gate._handle])
 
-    def clear(self):
-        self._rpc.request('HistogramLogBins.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('HistogramLogBins.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('HistogramLogBins.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('HistogramLogBins.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('HistogramLogBins.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('HistogramLogBins.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('HistogramLogBins.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('HistogramLogBins.getConfiguration', [self._handle])
-
     def getDataObject(self) -> HistogramLogBinsData:
         handle = self._rpc.request('HistogramLogBins.getDataObject', [self._handle])
-        return HistogramLogBinsData(self._rpc, handle)
+        return HistogramLogBinsData(handle)
 
     def getBinEdges(self):
         return _unpack_ndarray(self._rpc.request('HistogramLogBins.getBinEdges', [self._handle]))
@@ -2072,30 +1351,6 @@ class Histogram2D:
     def __init__(self, _rpc: _Connection, tagger, start_channel, stop_channel_1, stop_channel_2, binwidth_1, binwidth_2, n_bins_1, n_bins_2):
         self._handle = self._rpc.request('Histogram2D', [tagger._handle, start_channel, stop_channel_1, stop_channel_2, binwidth_1, binwidth_2, n_bins_1, n_bins_2])
 
-    def clear(self):
-        self._rpc.request('Histogram2D.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Histogram2D.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Histogram2D.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Histogram2D.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Histogram2D.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Histogram2D.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Histogram2D.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Histogram2D.getConfiguration', [self._handle])
-
     def getData(self):
         return _unpack_ndarray(self._rpc.request('Histogram2D.getData', [self._handle]))
 
@@ -2117,30 +1372,6 @@ class HistogramND:
     def __init__(self, _rpc: _Connection, tagger, start_channel, stop_channels, binwidths, n_bins):
         self._handle = self._rpc.request('HistogramND', [tagger._handle, start_channel, stop_channels, binwidths, n_bins])
 
-    def clear(self):
-        self._rpc.request('HistogramND.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('HistogramND.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('HistogramND.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('HistogramND.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('HistogramND.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('HistogramND.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('HistogramND.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('HistogramND.getConfiguration', [self._handle])
-
     def getData(self):
         return _unpack_ndarray(self._rpc.request('HistogramND.getData', [self._handle]))
 
@@ -2157,30 +1388,6 @@ class Experimental_MarkovProcessGenerator:
         self._handle = self._rpc.request('Experimental_MarkovProcessGenerator',
                             [getattr(a, '_handle', a) for a in args])
 
-    def clear(self):
-        self._rpc.request('Experimental_MarkovProcessGenerator.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Experimental_MarkovProcessGenerator.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Experimental_MarkovProcessGenerator.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Experimental_MarkovProcessGenerator.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Experimental_MarkovProcessGenerator.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Experimental_MarkovProcessGenerator.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Experimental_MarkovProcessGenerator.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Experimental_MarkovProcessGenerator.getConfiguration', [self._handle])
-
     def getChannel(self):
         return self._rpc.request('Experimental_MarkovProcessGenerator.getChannel', [self._handle])
 
@@ -2196,30 +1403,6 @@ class OverflowInjector:
     def __init__(self, _rpc: _Connection, tagger, delay, length):
         self._handle = self._rpc.request('OverflowInjector', [tagger._handle, delay, length])
 
-    def clear(self):
-        self._rpc.request('OverflowInjector.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('OverflowInjector.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('OverflowInjector.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('OverflowInjector.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('OverflowInjector.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('OverflowInjector.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('OverflowInjector.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('OverflowInjector.getConfiguration', [self._handle])
-
 
 @remote
 class PhaseNoiseData:
@@ -2227,8 +1410,7 @@ class PhaseNoiseData:
     _rpc: _Connection # this is injected by the @remote decorator
 
     """Server-side data object. Obtained via getDataObject() / getData()."""
-    def __init__(self, _rpc: _Connection, _handle: int):
-        self._rpc = _rpc
+    def __init__(self, _handle: int):
         self._handle = _handle
 
     def getPhaseNoise(self):
@@ -2258,33 +1440,9 @@ class PhaseNoise:
     def __init__(self, _rpc: _Connection, tagger, channel, samples_per_octave=32):
         self._handle = self._rpc.request('PhaseNoise', [tagger._handle, channel, samples_per_octave])
 
-    def clear(self):
-        self._rpc.request('PhaseNoise.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('PhaseNoise.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('PhaseNoise.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('PhaseNoise.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('PhaseNoise.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('PhaseNoise.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('PhaseNoise.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('PhaseNoise.getConfiguration', [self._handle])
-
     def getDataObject(self) -> PhaseNoiseData:
         handle = self._rpc.request('PhaseNoise.getDataObject', [self._handle])
-        return PhaseNoiseData(self._rpc, handle)
+        return PhaseNoiseData(handle)
 
 
 @remote
@@ -2294,30 +1452,6 @@ class Experimental_PhotonNumber:
 
     def __init__(self, _rpc: _Connection, tagger, trigger_ch, signal_start_ch, signal_stop_ch, slope, x_intercepts, dead_time):
         self._handle = self._rpc.request('Experimental_PhotonNumber', [tagger._handle, trigger_ch, signal_start_ch, signal_stop_ch, slope, x_intercepts, dead_time])
-
-    def clear(self):
-        self._rpc.request('Experimental_PhotonNumber.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Experimental_PhotonNumber.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Experimental_PhotonNumber.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Experimental_PhotonNumber.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Experimental_PhotonNumber.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Experimental_PhotonNumber.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Experimental_PhotonNumber.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Experimental_PhotonNumber.getConfiguration', [self._handle])
 
     def getChannels(self):
         return self._rpc.request('Experimental_PhotonNumber.getChannels', [self._handle])
@@ -2329,8 +1463,7 @@ class Experimental_PulsePerSecondData:
     _rpc: _Connection # this is injected by the @remote decorator
 
     """Server-side data object. Obtained via getDataObject() / getData()."""
-    def __init__(self, _rpc: _Connection, _handle: int):
-        self._rpc = _rpc
+    def __init__(self, _handle: int):
         self._handle = _handle
 
     def getIndices(self):
@@ -2367,33 +1500,9 @@ class Experimental_PulsePerSecondMonitor:
         self._handle = self._rpc.request('Experimental_PulsePerSecondMonitor',
                             [getattr(a, '_handle', a) for a in args])
 
-    def clear(self):
-        self._rpc.request('Experimental_PulsePerSecondMonitor.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Experimental_PulsePerSecondMonitor.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Experimental_PulsePerSecondMonitor.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Experimental_PulsePerSecondMonitor.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Experimental_PulsePerSecondMonitor.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Experimental_PulsePerSecondMonitor.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Experimental_PulsePerSecondMonitor.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Experimental_PulsePerSecondMonitor.getConfiguration', [self._handle])
-
     def getDataObject(self, remove=False) -> Experimental_PulsePerSecondData:
         handle = self._rpc.request('Experimental_PulsePerSecondMonitor.getDataObject', [self._handle, remove])
-        return Experimental_PulsePerSecondData(self._rpc, handle)
+        return Experimental_PulsePerSecondData(handle)
 
 
 @remote
@@ -2403,30 +1512,6 @@ class Sampler:
 
     def __init__(self, _rpc: _Connection, tagger, trigger, channels, max_triggers):
         self._handle = self._rpc.request('Sampler', [tagger._handle, trigger, channels, max_triggers])
-
-    def clear(self):
-        self._rpc.request('Sampler.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Sampler.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Sampler.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Sampler.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Sampler.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Sampler.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Sampler.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Sampler.getConfiguration', [self._handle])
 
     def getData(self):
         return _unpack_ndarray(self._rpc.request('Sampler.getData', [self._handle]))
@@ -2442,30 +1527,6 @@ class Scope:
 
     def __init__(self, _rpc: _Connection, tagger, event_channels, trigger_channel, window_size=1000000000, n_traces=1, n_max_events=1000):
         self._handle = self._rpc.request('Scope', [tagger._handle, event_channels, trigger_channel, window_size, n_traces, n_max_events])
-
-    def clear(self):
-        self._rpc.request('Scope.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Scope.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Scope.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Scope.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Scope.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Scope.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Scope.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Scope.getConfiguration', [self._handle])
 
     def getData(self):
         return self._rpc.request('Scope.getData', [self._handle])
@@ -2558,30 +1619,6 @@ class Experimental_SimSignalSplitter:
     def __init__(self, _rpc: _Connection, tagger, input_channel, ratio=0.5, seed=-1):
         self._handle = self._rpc.request('Experimental_SimSignalSplitter', [tagger._handle, input_channel, ratio, seed])
 
-    def clear(self):
-        self._rpc.request('Experimental_SimSignalSplitter.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Experimental_SimSignalSplitter.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Experimental_SimSignalSplitter.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Experimental_SimSignalSplitter.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Experimental_SimSignalSplitter.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Experimental_SimSignalSplitter.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Experimental_SimSignalSplitter.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Experimental_SimSignalSplitter.getConfiguration', [self._handle])
-
     def getChannels(self):
         return self._rpc.request('Experimental_SimSignalSplitter.getChannels', [self._handle])
 
@@ -2600,30 +1637,6 @@ class Experimental_TransformEfficiency:
     def __init__(self, _rpc: _Connection, tagger, input_channel, efficiency, copy=False, seed=-1):
         self._handle = self._rpc.request('Experimental_TransformEfficiency', [tagger._handle, input_channel, efficiency, copy, seed])
 
-    def clear(self):
-        self._rpc.request('Experimental_TransformEfficiency.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Experimental_TransformEfficiency.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Experimental_TransformEfficiency.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Experimental_TransformEfficiency.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Experimental_TransformEfficiency.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Experimental_TransformEfficiency.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Experimental_TransformEfficiency.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Experimental_TransformEfficiency.getConfiguration', [self._handle])
-
     def getChannel(self):
         return self._rpc.request('Experimental_TransformEfficiency.getChannel', [self._handle])
 
@@ -2635,30 +1648,6 @@ class Experimental_TransformGaussianBroadening:
 
     def __init__(self, _rpc: _Connection, tagger, input_channel, standard_deviation, copy=False, seed=-1):
         self._handle = self._rpc.request('Experimental_TransformGaussianBroadening', [tagger._handle, input_channel, standard_deviation, copy, seed])
-
-    def clear(self):
-        self._rpc.request('Experimental_TransformGaussianBroadening.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Experimental_TransformGaussianBroadening.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Experimental_TransformGaussianBroadening.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Experimental_TransformGaussianBroadening.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Experimental_TransformGaussianBroadening.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Experimental_TransformGaussianBroadening.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Experimental_TransformGaussianBroadening.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Experimental_TransformGaussianBroadening.getConfiguration', [self._handle])
 
     def getChannel(self):
         return self._rpc.request('Experimental_TransformGaussianBroadening.getChannel', [self._handle])
@@ -2672,30 +1661,6 @@ class Experimental_TransformDeadtime:
     def __init__(self, _rpc: _Connection, tagger, input_channel, deadtime, copy=False):
         self._handle = self._rpc.request('Experimental_TransformDeadtime', [tagger._handle, input_channel, deadtime, copy])
 
-    def clear(self):
-        self._rpc.request('Experimental_TransformDeadtime.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Experimental_TransformDeadtime.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Experimental_TransformDeadtime.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Experimental_TransformDeadtime.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Experimental_TransformDeadtime.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Experimental_TransformDeadtime.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Experimental_TransformDeadtime.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Experimental_TransformDeadtime.getConfiguration', [self._handle])
-
     def getChannel(self):
         return self._rpc.request('Experimental_TransformDeadtime.getChannel', [self._handle])
 
@@ -2707,30 +1672,6 @@ class Experimental_TransformCrosstalk:
 
     def __init__(self, _rpc: _Connection, tagger, input_channel, relay_input_channel, delay, tau, copy=False):
         self._handle = self._rpc.request('Experimental_TransformCrosstalk', [tagger._handle, input_channel, relay_input_channel, delay, tau, copy])
-
-    def clear(self):
-        self._rpc.request('Experimental_TransformCrosstalk.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Experimental_TransformCrosstalk.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Experimental_TransformCrosstalk.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Experimental_TransformCrosstalk.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Experimental_TransformCrosstalk.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Experimental_TransformCrosstalk.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Experimental_TransformCrosstalk.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Experimental_TransformCrosstalk.getConfiguration', [self._handle])
 
     def getChannel(self):
         return self._rpc.request('Experimental_TransformCrosstalk.getChannel', [self._handle])
@@ -2756,30 +1697,6 @@ class Experimental_SimLifetime:
     def __init__(self, _rpc: _Connection, tagger, input_channel, lifetime, emission_rate=0.1, seed=-1):
         self._handle = self._rpc.request('Experimental_SimLifetime', [tagger._handle, input_channel, lifetime, emission_rate, seed])
 
-    def clear(self):
-        self._rpc.request('Experimental_SimLifetime.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Experimental_SimLifetime.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Experimental_SimLifetime.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Experimental_SimLifetime.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Experimental_SimLifetime.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Experimental_SimLifetime.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Experimental_SimLifetime.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Experimental_SimLifetime.getConfiguration', [self._handle])
-
     def getChannel(self):
         return self._rpc.request('Experimental_SimLifetime.getChannel', [self._handle])
 
@@ -2799,30 +1716,6 @@ class StartStop:
         self._handle = self._rpc.request('StartStop',
                             [getattr(a, '_handle', a) for a in args])
 
-    def clear(self):
-        self._rpc.request('StartStop.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('StartStop.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('StartStop.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('StartStop.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('StartStop.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('StartStop.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('StartStop.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('StartStop.getConfiguration', [self._handle])
-
     def getData(self):
         return _unpack_ndarray(self._rpc.request('StartStop.getData', [self._handle]))
 
@@ -2837,7 +1730,7 @@ class SynchronizedMeasurements:
 
     def getTagger(self) -> TimeTaggerBase:
         handle = self._rpc.request('SynchronizedMeasurements.getTagger', [self._handle])
-        return TimeTaggerBase(self._rpc, handle)
+        return TimeTaggerBase(handle)
 
     def start(self):
         self._rpc.request('SynchronizedMeasurements.start', [self._handle])
@@ -2855,10 +1748,10 @@ class SynchronizedMeasurements:
         return self._rpc.request('SynchronizedMeasurements.isRunning', [self._handle])
 
     def registerMeasurement(self, measurement):
-        self._rpc.request('SynchronizedMeasurements.registerMeasurement', [self._handle, measurement._handle])
+        self._rpc.request('SynchronizedMeasurements.registerMeasurement', [self._handle, measurement])
 
     def unregisterMeasurement(self, measurement):
-        self._rpc.request('SynchronizedMeasurements.unregisterMeasurement', [self._handle, measurement._handle])
+        self._rpc.request('SynchronizedMeasurements.unregisterMeasurement', [self._handle, measurement])
 
     def waitUntilFinished(self, timeout=-1):
         self._rpc.request('SynchronizedMeasurements.waitUntilFinished', [self._handle, timeout])
@@ -2872,30 +1765,6 @@ class SyntheticSingleTag:
     def __init__(self,  *args):
         self._handle = self._rpc.request('SyntheticSingleTag',
                             [getattr(a, '_handle', a) for a in args])
-
-    def clear(self):
-        self._rpc.request('SyntheticSingleTag.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('SyntheticSingleTag.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('SyntheticSingleTag.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('SyntheticSingleTag.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('SyntheticSingleTag.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('SyntheticSingleTag.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('SyntheticSingleTag.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('SyntheticSingleTag.getConfiguration', [self._handle])
 
     def trigger(self):
         self._rpc.request('SyntheticSingleTag.trigger', [self._handle])
@@ -2912,30 +1781,6 @@ class TimeDifferences:
     def __init__(self,  *args):
         self._handle = self._rpc.request('TimeDifferences',
                             [getattr(a, '_handle', a) for a in args])
-
-    def clear(self):
-        self._rpc.request('TimeDifferences.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('TimeDifferences.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('TimeDifferences.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('TimeDifferences.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('TimeDifferences.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('TimeDifferences.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('TimeDifferences.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('TimeDifferences.getConfiguration', [self._handle])
 
     def getData(self):
         return _unpack_ndarray(self._rpc.request('TimeDifferences.getData', [self._handle]))
@@ -2968,30 +1813,6 @@ class Histogram:
         self._handle = self._rpc.request('Histogram',
                             [getattr(a, '_handle', a) for a in args])
 
-    def clear(self):
-        self._rpc.request('Histogram.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('Histogram.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('Histogram.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('Histogram.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('Histogram.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('Histogram.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('Histogram.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('Histogram.getConfiguration', [self._handle])
-
     def getData(self):
         return _unpack_ndarray(self._rpc.request('Histogram.getData', [self._handle]))
 
@@ -3006,30 +1827,6 @@ class TimeDifferencesND:
 
     def __init__(self, _rpc: _Connection, tagger, click_channel, start_channel, next_channels, sync_channels, n_histograms, binwidth, n_bins):
         self._handle = self._rpc.request('TimeDifferencesND', [tagger._handle, click_channel, start_channel, next_channels, sync_channels, n_histograms, binwidth, n_bins])
-
-    def clear(self):
-        self._rpc.request('TimeDifferencesND.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('TimeDifferencesND.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('TimeDifferencesND.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('TimeDifferencesND.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('TimeDifferencesND.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('TimeDifferencesND.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('TimeDifferencesND.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('TimeDifferencesND.getConfiguration', [self._handle])
 
     def getData(self):
         return _unpack_ndarray(self._rpc.request('TimeDifferencesND.getData', [self._handle]))
@@ -3055,33 +1852,9 @@ class TimeTagStream:
     def __init__(self, _rpc: _Connection, tagger, n_max_events, channels):
         self._handle = self._rpc.request('TimeTagStream', [tagger._handle, n_max_events, channels])
 
-    def clear(self):
-        self._rpc.request('TimeTagStream.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('TimeTagStream.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('TimeTagStream.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('TimeTagStream.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('TimeTagStream.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('TimeTagStream.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('TimeTagStream.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('TimeTagStream.getConfiguration', [self._handle])
-
     def getData(self) -> TimeTagStreamBuffer:
         handle = self._rpc.request('TimeTagStream.getData', [self._handle])
-        return TimeTagStreamBuffer(self._rpc, handle)
+        return TimeTagStreamBuffer(handle)
 
     def getCounts(self):
         return self._rpc.request('TimeTagStream.getCounts', [self._handle])
@@ -3093,8 +1866,7 @@ class TimeTagStreamBuffer:
     _rpc: _Connection # this is injected by the @remote decorator
 
     """Server-side data object. Obtained via getDataObject() / getData()."""
-    def __init__(self, _rpc: _Connection, _handle: int):
-        self._rpc = _rpc
+    def __init__(self, _handle: int):
         self._handle = _handle
 
     def getTimestamps(self):
@@ -3135,30 +1907,6 @@ class TriggerOnCountrate:
 
     def __init__(self, _rpc: _Connection, tagger, input_channel, reference_countrate, hysteresis, time_window):
         self._handle = self._rpc.request('TriggerOnCountrate', [tagger._handle, input_channel, reference_countrate, hysteresis, time_window])
-
-    def clear(self):
-        self._rpc.request('TriggerOnCountrate.clear', [self._handle])
-
-    def start(self):
-        self._rpc.request('TriggerOnCountrate.start', [self._handle])
-
-    def startFor(self, capture_duration, clear=True):
-        self._rpc.request('TriggerOnCountrate.startFor', [self._handle, capture_duration, clear])
-
-    def stop(self):
-        self._rpc.request('TriggerOnCountrate.stop', [self._handle])
-
-    def abort(self):
-        self._rpc.request('TriggerOnCountrate.abort', [self._handle])
-
-    def isRunning(self):
-        return self._rpc.request('TriggerOnCountrate.isRunning', [self._handle])
-
-    def getCaptureDuration(self):
-        return self._rpc.request('TriggerOnCountrate.getCaptureDuration', [self._handle])
-
-    def getConfiguration(self):
-        return self._rpc.request('TriggerOnCountrate.getConfiguration', [self._handle])
 
     def getChannelAbove(self):
         return self._rpc.request('TriggerOnCountrate.getChannelAbove', [self._handle])
@@ -3287,17 +2035,17 @@ def getCompilationTimestamp(_rpc: _Connection):
 @remote_fn
 def createTimeTagger(_rpc: _Connection, *args) -> TimeTagger:
     handle = _rpc.request('createTimeTagger', list(args))
-    return TimeTagger(_rpc, handle)
+    return TimeTagger(handle)
 
 @remote_fn
 def createTimeTaggerVirtual(_rpc: _Connection, *args) -> TimeTaggerVirtual:
     handle = _rpc.request('createTimeTaggerVirtual', list(args))
-    return TimeTaggerVirtual(_rpc, handle)
+    return TimeTaggerVirtual(handle)
 
 @remote_fn
 def createTimeTaggerNetwork(_rpc: _Connection, *args) -> TimeTaggerNetwork:
     handle = _rpc.request('createTimeTaggerNetwork', list(args))
-    return TimeTaggerNetwork(_rpc, handle)
+    return TimeTaggerNetwork(handle)
 
 @remote_fn
 def setCustomBitFileName(_rpc: _Connection, bitFileName):
