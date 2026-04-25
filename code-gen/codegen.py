@@ -221,8 +221,6 @@ class ServerGenerator:
 
         return lines
 
-    # ---- constructors ------------------------------------------------------
-
     def _gen_class_constructors(self) -> list[str]:
         lines = [
             '# Class constructors',
@@ -339,12 +337,14 @@ Usage:
 """
 
 from __future__ import annotations
+
+import io
 import itertools
 import socket
-import io
-import numpy as np
-import msgpack
+from functools import wraps
 
+import msgpack
+import numpy as np
 
 # Transport
 
@@ -369,6 +369,42 @@ class _Connection:
 
     def close(self):
         self._sock.close()
+
+_active_connection: _Connection | None = None
+
+def connect(host: str = 'localhost', port: int = 9000) -> _Connection:
+    global _active_connection
+    _active_connection = _Connection(host, port)
+    return _active_connection
+
+def get_connection() -> _Connection:
+    if _active_connection is None:
+        raise RuntimeError("No active connection, call connect first")
+
+    return _active_connection
+
+# wrap classes with a decorator to inject the rpc connection, this way we can
+# have the module look the same to the user as the actual swabian timetagger
+# library
+def remote(cls):
+    original_init = cls.__init__
+
+    @wraps(original_init)
+    def __init__(self, *args, **kwargs):
+        self._rpc = get_connection()
+        original_init(self, *args, **kwargs)
+
+    cls.__init__ = __init__
+    return cls
+
+# let's wrap the module level functions in the same way, now we can do things
+# like 'TT.getVersion()' just like we would with the *real* library
+def remote_fn(fn):
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        rpc = get_connection()
+        return fn(rpc, *args, **kwargs)
+    return wrapper
 
 
 # numpy array needs marshalling
@@ -405,7 +441,7 @@ class ClientGenerator:
     def generate(self) -> str:
         lines = [CLIENT_HEADER]
         lines += self._gen_classes()
-        lines += self._gen_session_class()
+        lines += self._gen_session()
         return '\n'.join(lines)
 
     def _gen_classes(self) -> list[str]:
@@ -423,11 +459,14 @@ class ClientGenerator:
         is_factory_returned = class_name in self._factory_returned
         all_methods = _collect_methods(class_name, self.schema)
 
-        lines = [f'class {class_name}:']
+        lines = [
+            '@remote',
+            f'class {class_name}:',
+            '',
+            '    _rpc: _Connection # this is injected by the @remote decorator',
+            '',
+        ]
 
-        # __init__
-        # DataObjects and factory-returned tagger classes both get the simple
-        # (rpc, handle) init — the user never constructs them directly.
         if is_data_obj or is_factory_returned:
             lines += self._gen_data_obj_init(class_name)
         else:
@@ -455,8 +494,7 @@ class ClientGenerator:
         if ctor is None:
             # No constructor in schema — internal/abstract class
             return [
-                '    def __init__(self, _rpc: _Connection, _handle: int):',
-                '        self._rpc = _rpc',
+                '    def __init__(self,_handle: int):',
                 '        self._handle = _handle',
             ]
 
@@ -475,9 +513,8 @@ class ClientGenerator:
             # integer handles while plain values (strings, ints, etc.) pass through
             # unchanged — no inheritance traversal needed.
             return [
-                '    def __init__(self, _rpc: _Connection, *args):',
-                '        self._rpc = _rpc',
-                f"        self._handle = self._rpc.request({method_key!r},",
+                '    def __init__(self,  *args):',
+                f'        self._handle = self._rpc.request({method_key!r},',
                 "                            [getattr(a, '_handle', a) for a in args])",
             ]
 
@@ -488,7 +525,6 @@ class ClientGenerator:
         # _rpc is always passed explicitly — no need to extract from a handle param.
         return [
             f'    def __init__({sig_params}):',
-            '        self._rpc = _rpc',
             f'        self._handle = self._rpc.request({method_key!r}, [{rpc_args}])',
         ]
 
@@ -541,73 +577,16 @@ class ClientGenerator:
 
         return lines
 
-    def _gen_session_class(self) -> list[str]:
-        lines = [
-            '# Session, holds the connection and exposes all module-level functions',
-            '',
-            'class Session:',
-            '    def __init__(self, host: str, port: int):',
-            '        self._rpc = _Connection(host, port)',
-            '',
-            '    def close(self):',
-            '        self._rpc.close()',
-            '',
-        ]
+    def _gen_session(self) -> list[str]:
+        lines = []
         for fn_name, fn in self.schema['functions'].items():
             if fn_name.startswith('_'):
                 continue
             lines += self._gen_session_method(fn_name, fn)
             lines.append('')
 
-        # Class constructors — every non-DataObject, non-factory-returned class
-        # gets a Session method so _rpc is always injected transparently.
-        lines.append('    # --- measurement and utility class constructors ---')
-        lines.append('')
-        for class_name, cls in self.schema['classes'].items():
-            if _is_data_object(class_name, cls):
-                continue
-            if class_name in self._factory_returned:
-                continue
-            if cls.get('constructor') is None:
-                continue
-            lines += self._gen_session_constructor(class_name, cls)
-            lines.append('')
-
-        # Module-level connect() entry point
-        lines += [
-            '',
-            '# Entry point',
-            '',
-            "def connect(host: str = 'localhost', port: int = 9000) -> Session:",
-            '    # Connect to a running TimeTagger RPC server.',
-            '    return Session(host, port)',
-        ]
         return lines
 
-    def _gen_session_constructor(self, class_name: str, cls: dict) -> list[str]:
-        """Generate a Session method that constructs class_name, injecting self._rpc."""
-        ctor = cls.get('constructor')
-        if not ctor or isinstance(ctor, str):
-            ctor = {}
-
-        ret_sig = f' -> {class_name}'
-
-        if ctor.get('params_variable'):
-            return [
-                f'    def {class_name}(self, *args){ret_sig}:',
-                f'        return {class_name}(self._rpc, *args)',
-            ]
-
-        params = ctor.get('params', [])
-        py_params, _ = self._client_params_and_args(params)
-        # Strip defaults to get bare param names for the forwarding call
-        call_args = ', '.join(p.split('=')[0] for p in py_params)
-        sig_params = ', '.join(['self'] + py_params)
-
-        return [
-            f'    def {class_name}({sig_params}){ret_sig}:',
-            f'        return {class_name}(self._rpc, {call_args})',
-        ]
 
     def _gen_session_method(self, fn_name: str, fn: dict) -> list[str]:
         ret_class = fn.get('returns', {}).get('returns_class')
@@ -623,37 +602,51 @@ class ClientGenerator:
             ret_sig = f' -> {ret_class}'
 
         if variadic:
-            sig = f'    def {fn_name}(self, *args){ret_sig}:'
+            sig = f'def {fn_name}(_rpc: _Connection, *args){ret_sig}:'
             if is_factory:
                 # createTimeTagger(*args) → TimeTagger(self._rpc, handle)
                 return [
+                    '@remote_fn',
                     sig,
-                    f'        handle = self._rpc.request({fn_name!r}, list(args))',
-                    f'        return {ret_class}(self._rpc, handle)',
+                    f'    handle = _rpc.request({fn_name!r}, list(args))',
+                    f'    return {ret_class}(_rpc, handle)',
                 ]
-            call = f'self._rpc.request({fn_name!r}, list(args))'
+            call = f'_rpc.request({fn_name!r}, list(args))'
         else:
             params = fn.get('params', [])
             py_params, rpc_args = self._client_params_and_args(params)
             sig = (
-                f'    def {fn_name}(self, {", ".join(py_params)}){ret_sig}:'
+                f'def {fn_name}(_rpc: _Connection, {", ".join(py_params)}){ret_sig}:'
                 if py_params
-                else f'    def {fn_name}(self){ret_sig}:'
+                else f'def {fn_name}(_rpc: _Connection){ret_sig}:'
             )
             rpc_list = f'[{rpc_args}]' if rpc_args else '[]'
             if is_factory:
                 return [
+                    '@remote_fn',
                     sig,
-                    f'        handle = self._rpc.request({fn_name!r}, {rpc_list})',
-                    f'        return {ret_class}(self._rpc, handle)',
+                    f'    handle = _rpc.request({fn_name!r}, {rpc_list})',
+                    f'    return {ret_class}(_rpc, handle)',
                 ]
-            call = f'self._rpc.request({fn_name!r}, {rpc_list})'
+            call = f'_rpc.request({fn_name!r}, {rpc_list})'
 
         if is_ndarray:
-            return [sig, f'        return _unpack_ndarray({call})']
+            return [
+                '@remote_fn',
+                sig,
+                f'    return _unpack_ndarray({call})',
+            ]
         if is_null:
-            return [sig, f'        {call}']
-        return [sig, f'        return {call}']
+            return [
+                '@remote_fn',
+                sig,
+                f'    {call}',
+            ]
+        return [
+            '@remote_fn',
+            sig,
+            f'    return {call}',
+        ]
 
     def _client_params_and_args(self, params: list) -> tuple[list[str], str]:
         """
