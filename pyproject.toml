@@ -10,5 +10,8 @@ dependencies = [
 ]
 
 [build-system]
-requires = ["setuptools", "build", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.scripts]
+swamptt-server = "swamptt.server:main"
