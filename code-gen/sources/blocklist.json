@@ -35,8 +35,7 @@
     "IteratorBase":           "abstract",
     "Iterator":               "dangerous",
     "HistogramCustomBins":    "excluded",
-    "CustomLogger":           "callback",
-    "TimeTaggerServer":       "abstract"
+    "CustomLogger":           "callback"
   },
 
   "excluded_functions": {
@@ -61,10 +60,6 @@
     }
   },
 
-  "abstract_bases": {
-    "_description": "Classes whose methods are inherited but which are never standalone handles on the wire.",
-    "classes": ["TimeTaggerSource", "TimeTaggerBase", "TimeTaggerHardware", "IteratorBase"]
-  },
 
   "type_overrides": {
     "_description": "The pyi uses 'void' for methods that actually return ndarrays via SWIG output arguments. List them here so the converter emits the correct wire type.",
