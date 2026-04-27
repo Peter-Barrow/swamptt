@@ -696,7 +696,7 @@ class Combinations:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, channels, window_size):
+    def __init__(self, tagger, channels, window_size):
         self._handle = self._rpc.request('Combinations', [tagger._handle, channels, window_size])
 
     def getChannel(self, input_channels):
@@ -720,7 +720,7 @@ class Combiner:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, channels):
+    def __init__(self, tagger, channels):
         self._handle = self._rpc.request('Combiner', [tagger._handle, channels])
 
     def getChannelCounts(self):
@@ -754,7 +754,7 @@ class ConstantFractionDiscriminator:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, channels, search_window):
+    def __init__(self, tagger, channels, search_window):
         self._handle = self._rpc.request('ConstantFractionDiscriminator', [tagger._handle, channels, search_window])
 
     def getChannels(self):
@@ -807,7 +807,7 @@ class CorrelationPairs:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, channels, binwidth=1000, n_bins=1000):
+    def __init__(self, tagger, channels, binwidth=1000, n_bins=1000):
         self._handle = self._rpc.request('CorrelationPairs', [tagger._handle, channels, binwidth, n_bins])
 
     def getDataObject(self) -> CorrelationPairsData:
@@ -891,7 +891,7 @@ class Counter:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, channels, binwidth=1000000000, n_values=1):
+    def __init__(self, tagger, channels, binwidth=1000000000, n_values=1):
         self._handle = self._rpc.request('Counter', [tagger._handle, channels, binwidth, n_values])
 
     def getData(self, rolling=True):
@@ -916,7 +916,7 @@ class Countrate:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, channels):
+    def __init__(self, tagger, channels):
         self._handle = self._rpc.request('Countrate', [tagger._handle, channels])
 
     def getData(self):
@@ -931,7 +931,7 @@ class DelayedChannels:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, input_channels, delay):
+    def __init__(self, tagger, input_channels, delay):
         self._handle = self._rpc.request('DelayedChannels', [tagger._handle, input_channels, delay])
 
     def getChannels(self):
@@ -946,7 +946,7 @@ class DelayedChannel:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, input_channel, delay):
+    def __init__(self, tagger, input_channel, delay):
         self._handle = self._rpc.request('DelayedChannel', [tagger._handle, input_channel, delay])
 
     def getChannel(self):
@@ -1007,7 +1007,7 @@ class FileWriter:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, filename, channels):
+    def __init__(self, tagger, filename, channels):
         self._handle = self._rpc.request('FileWriter', [tagger._handle, filename, channels])
 
     def split(self, *args):
@@ -1193,7 +1193,7 @@ class FrequencyCounter:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, channels, sampling_interval, fitting_window, n_values=0):
+    def __init__(self, tagger, channels, sampling_interval, fitting_window, n_values=0):
         self._handle = self._rpc.request('FrequencyCounter', [tagger._handle, channels, sampling_interval, fitting_window, n_values])
 
     def getDataObject(self, event_divider=1, remove=False, channels_last_dim=False) -> FrequencyCounterData:
@@ -1206,7 +1206,7 @@ class FrequencyMultiplier:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, input_channel, multiplier):
+    def __init__(self, tagger, input_channel, multiplier):
         self._handle = self._rpc.request('FrequencyMultiplier', [tagger._handle, input_channel, multiplier])
 
     def getChannel(self):
@@ -1270,7 +1270,7 @@ class FrequencyStability:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, channel, steps, average=1000, trace_len=1000):
+    def __init__(self, tagger, channel, steps, average=1000, trace_len=1000):
         self._handle = self._rpc.request('FrequencyStability', [tagger._handle, channel, steps, average, trace_len])
 
     def getDataObject(self) -> FrequencyStabilityData:
@@ -1324,7 +1324,7 @@ class HistogramLogBins:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, click_channel, start_channel, exp_start, exp_stop, n_bins, click_gate=None, start_gate=None):
+    def __init__(self, tagger, click_channel, start_channel, exp_start, exp_stop, n_bins, click_gate=None, start_gate=None):
         self._handle = self._rpc.request('HistogramLogBins', [tagger._handle, click_channel, start_channel, exp_start, exp_stop, n_bins, click_gate._handle, start_gate._handle])
 
     def getDataObject(self) -> HistogramLogBinsData:
@@ -1349,7 +1349,7 @@ class Histogram2D:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, start_channel, stop_channel_1, stop_channel_2, binwidth_1, binwidth_2, n_bins_1, n_bins_2):
+    def __init__(self, tagger, start_channel, stop_channel_1, stop_channel_2, binwidth_1, binwidth_2, n_bins_1, n_bins_2):
         self._handle = self._rpc.request('Histogram2D', [tagger._handle, start_channel, stop_channel_1, stop_channel_2, binwidth_1, binwidth_2, n_bins_1, n_bins_2])
 
     def getData(self):
@@ -1370,7 +1370,7 @@ class HistogramND:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, start_channel, stop_channels, binwidths, n_bins):
+    def __init__(self, tagger, start_channel, stop_channels, binwidths, n_bins):
         self._handle = self._rpc.request('HistogramND', [tagger._handle, start_channel, stop_channels, binwidths, n_bins])
 
     def getData(self):
@@ -1401,7 +1401,7 @@ class OverflowInjector:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, delay, length):
+    def __init__(self, tagger, delay, length):
         self._handle = self._rpc.request('OverflowInjector', [tagger._handle, delay, length])
 
 
@@ -1438,7 +1438,7 @@ class PhaseNoise:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, channel, samples_per_octave=32):
+    def __init__(self, tagger, channel, samples_per_octave=32):
         self._handle = self._rpc.request('PhaseNoise', [tagger._handle, channel, samples_per_octave])
 
     def getDataObject(self) -> PhaseNoiseData:
@@ -1451,7 +1451,7 @@ class Experimental_PhotonNumber:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, trigger_ch, signal_start_ch, signal_stop_ch, slope, x_intercepts, dead_time):
+    def __init__(self, tagger, trigger_ch, signal_start_ch, signal_stop_ch, slope, x_intercepts, dead_time):
         self._handle = self._rpc.request('Experimental_PhotonNumber', [tagger._handle, trigger_ch, signal_start_ch, signal_stop_ch, slope, x_intercepts, dead_time])
 
     def getChannels(self):
@@ -1511,7 +1511,7 @@ class Sampler:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, trigger, channels, max_triggers):
+    def __init__(self, tagger, trigger, channels, max_triggers):
         self._handle = self._rpc.request('Sampler', [tagger._handle, trigger, channels, max_triggers])
 
     def getData(self):
@@ -1526,7 +1526,7 @@ class Scope:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, event_channels, trigger_channel, window_size=1000000000, n_traces=1, n_max_events=1000):
+    def __init__(self, tagger, event_channels, trigger_channel, window_size=1000000000, n_traces=1, n_max_events=1000):
         self._handle = self._rpc.request('Scope', [tagger._handle, event_channels, trigger_channel, window_size, n_traces, n_max_events])
 
     def getData(self):
@@ -1617,7 +1617,7 @@ class Experimental_SimSignalSplitter:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, input_channel, ratio=0.5, seed=-1):
+    def __init__(self, tagger, input_channel, ratio=0.5, seed=-1):
         self._handle = self._rpc.request('Experimental_SimSignalSplitter', [tagger._handle, input_channel, ratio, seed])
 
     def getChannels(self):
@@ -1635,7 +1635,7 @@ class Experimental_TransformEfficiency:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, input_channel, efficiency, copy=False, seed=-1):
+    def __init__(self, tagger, input_channel, efficiency, copy=False, seed=-1):
         self._handle = self._rpc.request('Experimental_TransformEfficiency', [tagger._handle, input_channel, efficiency, copy, seed])
 
     def getChannel(self):
@@ -1647,7 +1647,7 @@ class Experimental_TransformGaussianBroadening:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, input_channel, standard_deviation, copy=False, seed=-1):
+    def __init__(self, tagger, input_channel, standard_deviation, copy=False, seed=-1):
         self._handle = self._rpc.request('Experimental_TransformGaussianBroadening', [tagger._handle, input_channel, standard_deviation, copy, seed])
 
     def getChannel(self):
@@ -1659,7 +1659,7 @@ class Experimental_TransformDeadtime:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, input_channel, deadtime, copy=False):
+    def __init__(self, tagger, input_channel, deadtime, copy=False):
         self._handle = self._rpc.request('Experimental_TransformDeadtime', [tagger._handle, input_channel, deadtime, copy])
 
     def getChannel(self):
@@ -1671,7 +1671,7 @@ class Experimental_TransformCrosstalk:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, input_channel, relay_input_channel, delay, tau, copy=False):
+    def __init__(self, tagger, input_channel, relay_input_channel, delay, tau, copy=False):
         self._handle = self._rpc.request('Experimental_TransformCrosstalk', [tagger._handle, input_channel, relay_input_channel, delay, tau, copy])
 
     def getChannel(self):
@@ -1683,7 +1683,7 @@ class Experimental_SimDetector:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, input_channel, efficiency=1.0, darkcount_rate=0.0, jitter=0, deadtime=0.0, seed=-1):
+    def __init__(self, tagger, input_channel, efficiency=1.0, darkcount_rate=0.0, jitter=0, deadtime=0.0, seed=-1):
         self._handle = self._rpc.request('Experimental_SimDetector', [tagger._handle, input_channel, efficiency, darkcount_rate, jitter, deadtime, seed])
 
     def getChannel(self):
@@ -1695,7 +1695,7 @@ class Experimental_SimLifetime:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, input_channel, lifetime, emission_rate=0.1, seed=-1):
+    def __init__(self, tagger, input_channel, lifetime, emission_rate=0.1, seed=-1):
         self._handle = self._rpc.request('Experimental_SimLifetime', [tagger._handle, input_channel, lifetime, emission_rate, seed])
 
     def getChannel(self):
@@ -1726,7 +1726,7 @@ class SynchronizedMeasurements:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger):
+    def __init__(self, tagger):
         self._handle = self._rpc.request('SynchronizedMeasurements', [tagger._handle])
 
     def getTagger(self) -> TimeTaggerBase:
@@ -1826,7 +1826,7 @@ class TimeDifferencesND:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, click_channel, start_channel, next_channels, sync_channels, n_histograms, binwidth, n_bins):
+    def __init__(self, tagger, click_channel, start_channel, next_channels, sync_channels, n_histograms, binwidth, n_bins):
         self._handle = self._rpc.request('TimeDifferencesND', [tagger._handle, click_channel, start_channel, next_channels, sync_channels, n_histograms, binwidth, n_bins])
 
     def getData(self):
@@ -1850,7 +1850,7 @@ class TimeTagStream:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, n_max_events, channels):
+    def __init__(self, tagger, n_max_events, channels):
         self._handle = self._rpc.request('TimeTagStream', [tagger._handle, n_max_events, channels])
 
     def getData(self) -> TimeTagStreamBuffer:
@@ -1906,7 +1906,7 @@ class TriggerOnCountrate:
 
     _rpc: _Connection # this is injected by the @remote decorator
 
-    def __init__(self, _rpc: _Connection, tagger, input_channel, reference_countrate, hysteresis, time_window):
+    def __init__(self, tagger, input_channel, reference_countrate, hysteresis, time_window):
         self._handle = self._rpc.request('TriggerOnCountrate', [tagger._handle, input_channel, reference_countrate, hysteresis, time_window])
 
     def getChannelAbove(self):

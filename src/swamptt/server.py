@@ -8,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 import msgpack
 
-from .server_handlers import HANDLERS, HandlerContext
+from .server_handlers import HANDLERS, HandlerContext, _lookup
 
 registry = {
     '_counter': itertools.count(1),  # look up counter when requesting a ctor,
@@ -78,6 +78,9 @@ async def handle_client(
                     response = [1, msgid, None, result]
                 except Exception as e:
                     response = [1, msgid, str(e), None]
+                    logger.error(
+                        f'-> session: {session_id}:{msgid} requested {method} -> failed {e}'
+                    )
 
                 writer.write(msgpack.packb(response, use_bin_type=True))
                 await writer.drain()

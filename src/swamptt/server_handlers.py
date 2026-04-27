@@ -231,7 +231,7 @@ def _ctor_ChannelGate(ctx: HandlerContext, params):
 
 @handler("Coincidences")
 def _ctor_Coincidences(ctx: HandlerContext, params):
-    obj = TT.Coincidences(*params)
+    obj = TT.Coincidences(_lookup(ctx.registry, params[0]), *params[1:])
     return _register(obj, 'Coincidences', ctx.session_id, ctx.registry, ctx.sessions)
 
 @handler("Coincidence")
@@ -251,7 +251,7 @@ def _ctor_Combiner(ctx: HandlerContext, params):
 
 @handler("ConditionalFilterChannel")
 def _ctor_ConditionalFilterChannel(ctx: HandlerContext, params):
-    obj = TT.ConditionalFilterChannel(*params)
+    obj = TT.ConditionalFilterChannel(_lookup(ctx.registry, params[0]), *params[1:])
     return _register(obj, 'ConditionalFilterChannel', ctx.session_id, ctx.registry, ctx.sessions)
 
 @handler("ConstantFractionDiscriminator")
@@ -261,7 +261,7 @@ def _ctor_ConstantFractionDiscriminator(ctx: HandlerContext, params):
 
 @handler("Correlation")
 def _ctor_Correlation(ctx: HandlerContext, params):
-    obj = TT.Correlation(*params)
+    obj = TT.Correlation(_lookup(ctx.registry, params[0]), *params[1:])
     return _register(obj, 'Correlation', ctx.session_id, ctx.registry, ctx.sessions)
 
 @handler("CorrelationPairsData")
@@ -276,7 +276,7 @@ def _ctor_CorrelationPairs(ctx: HandlerContext, params):
 
 @handler("CountBetweenMarkers")
 def _ctor_CountBetweenMarkers(ctx: HandlerContext, params):
-    obj = TT.CountBetweenMarkers(*params)
+    obj = TT.CountBetweenMarkers(_lookup(ctx.registry, params[0]), *params[1:])
     return _register(obj, 'CountBetweenMarkers', ctx.session_id, ctx.registry, ctx.sessions)
 
 @handler("CounterData")
@@ -306,12 +306,12 @@ def _ctor_DelayedChannel(ctx: HandlerContext, params):
 
 @handler("Dump")
 def _ctor_Dump(ctx: HandlerContext, params):
-    obj = TT.Dump(*params)
+    obj = TT.Dump(_lookup(ctx.registry, params[0]), *params[1:])
     return _register(obj, 'Dump', ctx.session_id, ctx.registry, ctx.sessions)
 
 @handler("EventGenerator")
 def _ctor_EventGenerator(ctx: HandlerContext, params):
-    obj = TT.EventGenerator(*params)
+    obj = TT.EventGenerator(_lookup(ctx.registry, params[0]), *params[1:])
     return _register(obj, 'EventGenerator', ctx.session_id, ctx.registry, ctx.sessions)
 
 @handler("FileReader")
@@ -361,7 +361,7 @@ def _ctor_FrequencyStability(ctx: HandlerContext, params):
 
 @handler("GatedChannel")
 def _ctor_GatedChannel(ctx: HandlerContext, params):
-    obj = TT.GatedChannel(*params)
+    obj = TT.GatedChannel(_lookup(ctx.registry, params[0]), *params[1:])
     return _register(obj, 'GatedChannel', ctx.session_id, ctx.registry, ctx.sessions)
 
 @handler("HistogramLogBinsData")
@@ -386,7 +386,7 @@ def _ctor_HistogramND(ctx: HandlerContext, params):
 
 @handler("Experimental_MarkovProcessGenerator")
 def _ctor_Experimental_MarkovProcessGenerator(ctx: HandlerContext, params):
-    obj = TT.Experimental_MarkovProcessGenerator(*params)
+    obj = TT.Experimental_MarkovProcessGenerator(_lookup(ctx.registry, params[0]), *params[1:])
     return _register(obj, 'Experimental_MarkovProcessGenerator', ctx.session_id, ctx.registry, ctx.sessions)
 
 @handler("OverflowInjector")
@@ -416,7 +416,7 @@ def _ctor_Experimental_PulsePerSecondData(ctx: HandlerContext, params):
 
 @handler("Experimental_PulsePerSecondMonitor")
 def _ctor_Experimental_PulsePerSecondMonitor(ctx: HandlerContext, params):
-    obj = TT.Experimental_PulsePerSecondMonitor(*params)
+    obj = TT.Experimental_PulsePerSecondMonitor(_lookup(ctx.registry, params[0]), *params[1:])
     return _register(obj, 'Experimental_PulsePerSecondMonitor', ctx.session_id, ctx.registry, ctx.sessions)
 
 @handler("Sampler")
@@ -501,7 +501,7 @@ def _ctor_Experimental_SimLifetime(ctx: HandlerContext, params):
 
 @handler("StartStop")
 def _ctor_StartStop(ctx: HandlerContext, params):
-    obj = TT.StartStop(*params)
+    obj = TT.StartStop(_lookup(ctx.registry, params[0]), *params[1:])
     return _register(obj, 'StartStop', ctx.session_id, ctx.registry, ctx.sessions)
 
 @handler("SynchronizedMeasurements")
@@ -511,17 +511,17 @@ def _ctor_SynchronizedMeasurements(ctx: HandlerContext, params):
 
 @handler("SyntheticSingleTag")
 def _ctor_SyntheticSingleTag(ctx: HandlerContext, params):
-    obj = TT.SyntheticSingleTag(*params)
+    obj = TT.SyntheticSingleTag(_lookup(ctx.registry, params[0]), *params[1:])
     return _register(obj, 'SyntheticSingleTag', ctx.session_id, ctx.registry, ctx.sessions)
 
 @handler("TimeDifferences")
 def _ctor_TimeDifferences(ctx: HandlerContext, params):
-    obj = TT.TimeDifferences(*params)
+    obj = TT.TimeDifferences(_lookup(ctx.registry, params[0]), *params[1:])
     return _register(obj, 'TimeDifferences', ctx.session_id, ctx.registry, ctx.sessions)
 
 @handler("Histogram")
 def _ctor_Histogram(ctx: HandlerContext, params):
-    obj = TT.Histogram(*params)
+    obj = TT.Histogram(_lookup(ctx.registry, params[0]), *params[1:])
     return _register(obj, 'Histogram', ctx.session_id, ctx.registry, ctx.sessions)
 
 @handler("TimeDifferencesND")

@@ -36,6 +36,9 @@ def _is_data_object(class_name: str, cls: dict) -> bool:
     """DataObject classes are identified by having a discard() method."""
     return 'discard' in cls.get('methods', {})
 
+def _inherits_IteratorBase(cls: dict) -> bool:
+    return cls.get("inherits") == 'IteratorBase'
+
 
 def _collect_methods(class_name: str, schema: dict) -> dict:
     """
@@ -249,7 +252,10 @@ class ServerGenerator:
 
         if variadic:
             # Resolve first param if it's a handle, splat the rest
-            lines.append(f'    obj = TT.{class_name}(*params)')
+            if _inherits_IteratorBase(self.schema['classes'][class_name]):
+                lines.append(f'    obj = TT.{class_name}(_lookup(ctx.registry, params[0]), *params[1:])')
+            else:
+                lines.append(f'    obj = TT.{class_name}(*params)')
         else:
             args = self._server_args(params, offset=0)
             lines.append(f'    obj = TT.{class_name}({args})')
@@ -525,7 +531,7 @@ class ClientGenerator:
 
         params = ctor.get('params', [])
         py_params, rpc_args = self._client_params_and_args(params)
-        sig_params = ', '.join(['self', '_rpc: _Connection'] + py_params)
+        sig_params = ', '.join(['self'] + py_params)
 
         # _rpc is always passed explicitly — no need to extract from a handle param.
         return [
