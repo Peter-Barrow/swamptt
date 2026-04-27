@@ -3,10 +3,11 @@ name = "swamptt"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.13"
 dependencies = [
     "msgpack>=1.1.2",
     "numpy>=2.4.4",
+    "swabian-timetagger==2.20.2; sys.platform=='linux'",
 ]
 
 [build-system]
