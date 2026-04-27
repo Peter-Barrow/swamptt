@@ -1,6 +1,6 @@
 <div align="center">
 
-  <h1>swamptt</h1>
+  <img src="assets/swamptt-text.png" alt="swamptt logo" width="300"/>
   <p><em>This is my swamp. And my timetagger.</em></p>
   
 </div>
