@@ -1300,6 +1300,46 @@ def _m_ChannelGate_initial(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.initial()
 
+@handler("Coincidences.clear")
+def _m_Coincidences_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Coincidences.start")
+def _m_Coincidences_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Coincidences.startFor")
+def _m_Coincidences_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Coincidences.stop")
+def _m_Coincidences_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Coincidences.abort")
+def _m_Coincidences_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Coincidences.isRunning")
+def _m_Coincidences_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Coincidences.getCaptureDuration")
+def _m_Coincidences_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Coincidences.getConfiguration")
+def _m_Coincidences_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
 @handler("Coincidences.getChannels")
 def _m_Coincidences_getChannels(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -1314,6 +1354,46 @@ def _m_Coincidences_setCoincidenceWindow(ctx: HandlerContext, params):
 def _m_Coincidence_getChannel(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getChannel()
+
+@handler("Combinations.clear")
+def _m_Combinations_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Combinations.start")
+def _m_Combinations_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Combinations.startFor")
+def _m_Combinations_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Combinations.stop")
+def _m_Combinations_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Combinations.abort")
+def _m_Combinations_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Combinations.isRunning")
+def _m_Combinations_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Combinations.getCaptureDuration")
+def _m_Combinations_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Combinations.getConfiguration")
+def _m_Combinations_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("Combinations.getChannel")
 def _m_Combinations_getChannel(ctx: HandlerContext, params):
@@ -1340,6 +1420,46 @@ def _m_Combinations_getSumChannel(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getSumChannel(params[1])
 
+@handler("Combiner.clear")
+def _m_Combiner_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Combiner.start")
+def _m_Combiner_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Combiner.startFor")
+def _m_Combiner_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Combiner.stop")
+def _m_Combiner_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Combiner.abort")
+def _m_Combiner_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Combiner.isRunning")
+def _m_Combiner_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Combiner.getCaptureDuration")
+def _m_Combiner_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Combiner.getConfiguration")
+def _m_Combiner_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
 @handler("Combiner.getChannelCounts")
 def _m_Combiner_getChannelCounts(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -1355,6 +1475,46 @@ def _m_Combiner_getChannel(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getChannel()
 
+@handler("ConditionalFilterChannel.clear")
+def _m_ConditionalFilterChannel_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("ConditionalFilterChannel.start")
+def _m_ConditionalFilterChannel_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("ConditionalFilterChannel.startFor")
+def _m_ConditionalFilterChannel_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("ConditionalFilterChannel.stop")
+def _m_ConditionalFilterChannel_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("ConditionalFilterChannel.abort")
+def _m_ConditionalFilterChannel_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("ConditionalFilterChannel.isRunning")
+def _m_ConditionalFilterChannel_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("ConditionalFilterChannel.getCaptureDuration")
+def _m_ConditionalFilterChannel_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("ConditionalFilterChannel.getConfiguration")
+def _m_ConditionalFilterChannel_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
 @handler("ConditionalFilterChannel.getChannel")
 def _m_ConditionalFilterChannel_getChannel(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -1365,10 +1525,90 @@ def _m_ConditionalFilterChannel_getChannels(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getChannels()
 
+@handler("ConstantFractionDiscriminator.clear")
+def _m_ConstantFractionDiscriminator_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("ConstantFractionDiscriminator.start")
+def _m_ConstantFractionDiscriminator_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("ConstantFractionDiscriminator.startFor")
+def _m_ConstantFractionDiscriminator_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("ConstantFractionDiscriminator.stop")
+def _m_ConstantFractionDiscriminator_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("ConstantFractionDiscriminator.abort")
+def _m_ConstantFractionDiscriminator_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("ConstantFractionDiscriminator.isRunning")
+def _m_ConstantFractionDiscriminator_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("ConstantFractionDiscriminator.getCaptureDuration")
+def _m_ConstantFractionDiscriminator_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("ConstantFractionDiscriminator.getConfiguration")
+def _m_ConstantFractionDiscriminator_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
 @handler("ConstantFractionDiscriminator.getChannels")
 def _m_ConstantFractionDiscriminator_getChannels(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getChannels()
+
+@handler("Correlation.clear")
+def _m_Correlation_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Correlation.start")
+def _m_Correlation_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Correlation.startFor")
+def _m_Correlation_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Correlation.stop")
+def _m_Correlation_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Correlation.abort")
+def _m_Correlation_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Correlation.isRunning")
+def _m_Correlation_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Correlation.getCaptureDuration")
+def _m_Correlation_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Correlation.getConfiguration")
+def _m_Correlation_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("Correlation.getData")
 def _m_Correlation_getData(ctx: HandlerContext, params):
@@ -1405,6 +1645,46 @@ def _m_CorrelationPairsData_discard(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.discard()
 
+@handler("CorrelationPairs.clear")
+def _m_CorrelationPairs_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("CorrelationPairs.start")
+def _m_CorrelationPairs_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("CorrelationPairs.startFor")
+def _m_CorrelationPairs_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("CorrelationPairs.stop")
+def _m_CorrelationPairs_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("CorrelationPairs.abort")
+def _m_CorrelationPairs_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("CorrelationPairs.isRunning")
+def _m_CorrelationPairs_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("CorrelationPairs.getCaptureDuration")
+def _m_CorrelationPairs_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("CorrelationPairs.getConfiguration")
+def _m_CorrelationPairs_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
 @handler("CorrelationPairs.getDataObject")
 def _m_CorrelationPairs_getDataObject(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -1415,6 +1695,46 @@ def _m_CorrelationPairs_getDataObject(ctx: HandlerContext, params):
 def _m_CorrelationPairs_getIndex(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return _pack_ndarray(obj.getIndex())
+
+@handler("CountBetweenMarkers.clear")
+def _m_CountBetweenMarkers_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("CountBetweenMarkers.start")
+def _m_CountBetweenMarkers_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("CountBetweenMarkers.startFor")
+def _m_CountBetweenMarkers_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("CountBetweenMarkers.stop")
+def _m_CountBetweenMarkers_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("CountBetweenMarkers.abort")
+def _m_CountBetweenMarkers_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("CountBetweenMarkers.isRunning")
+def _m_CountBetweenMarkers_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("CountBetweenMarkers.getCaptureDuration")
+def _m_CountBetweenMarkers_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("CountBetweenMarkers.getConfiguration")
+def _m_CountBetweenMarkers_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("CountBetweenMarkers.getData")
 def _m_CountBetweenMarkers_getData(ctx: HandlerContext, params):
@@ -1496,6 +1816,46 @@ def _m_CounterData_discard(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.discard()
 
+@handler("Counter.clear")
+def _m_Counter_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Counter.start")
+def _m_Counter_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Counter.startFor")
+def _m_Counter_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Counter.stop")
+def _m_Counter_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Counter.abort")
+def _m_Counter_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Counter.isRunning")
+def _m_Counter_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Counter.getCaptureDuration")
+def _m_Counter_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Counter.getConfiguration")
+def _m_Counter_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
 @handler("Counter.getData")
 def _m_Counter_getData(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -1522,6 +1882,46 @@ def _m_Counter_getDataObject(ctx: HandlerContext, params):
     result = obj.getDataObject(params[1])
     return _register(result, 'CounterData', ctx.session_id, ctx.registry, ctx.sessions)
 
+@handler("Countrate.clear")
+def _m_Countrate_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Countrate.start")
+def _m_Countrate_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Countrate.startFor")
+def _m_Countrate_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Countrate.stop")
+def _m_Countrate_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Countrate.abort")
+def _m_Countrate_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Countrate.isRunning")
+def _m_Countrate_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Countrate.getCaptureDuration")
+def _m_Countrate_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Countrate.getConfiguration")
+def _m_Countrate_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
 @handler("Countrate.getData")
 def _m_Countrate_getData(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -1531,6 +1931,46 @@ def _m_Countrate_getData(ctx: HandlerContext, params):
 def _m_Countrate_getCountsTotal(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return _pack_ndarray(obj.getCountsTotal())
+
+@handler("DelayedChannels.clear")
+def _m_DelayedChannels_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("DelayedChannels.start")
+def _m_DelayedChannels_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("DelayedChannels.startFor")
+def _m_DelayedChannels_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("DelayedChannels.stop")
+def _m_DelayedChannels_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("DelayedChannels.abort")
+def _m_DelayedChannels_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("DelayedChannels.isRunning")
+def _m_DelayedChannels_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("DelayedChannels.getCaptureDuration")
+def _m_DelayedChannels_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("DelayedChannels.getConfiguration")
+def _m_DelayedChannels_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("DelayedChannels.getChannels")
 def _m_DelayedChannels_getChannels(ctx: HandlerContext, params):
@@ -1546,6 +1986,86 @@ def _m_DelayedChannels_setDelay(ctx: HandlerContext, params):
 def _m_DelayedChannel_getChannel(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getChannel()
+
+@handler("Dump.clear")
+def _m_Dump_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Dump.start")
+def _m_Dump_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Dump.startFor")
+def _m_Dump_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Dump.stop")
+def _m_Dump_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Dump.abort")
+def _m_Dump_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Dump.isRunning")
+def _m_Dump_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Dump.getCaptureDuration")
+def _m_Dump_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Dump.getConfiguration")
+def _m_Dump_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
+@handler("EventGenerator.clear")
+def _m_EventGenerator_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("EventGenerator.start")
+def _m_EventGenerator_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("EventGenerator.startFor")
+def _m_EventGenerator_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("EventGenerator.stop")
+def _m_EventGenerator_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("EventGenerator.abort")
+def _m_EventGenerator_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("EventGenerator.isRunning")
+def _m_EventGenerator_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("EventGenerator.getCaptureDuration")
+def _m_EventGenerator_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("EventGenerator.getConfiguration")
+def _m_EventGenerator_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("EventGenerator.getChannel")
 def _m_EventGenerator_getChannel(ctx: HandlerContext, params):
@@ -1577,6 +2097,46 @@ def _m_FileReader_getChannelList(ctx: HandlerContext, params):
 def _m_FileReader_getLastMarker(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getLastMarker()
+
+@handler("FileWriter.clear")
+def _m_FileWriter_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("FileWriter.start")
+def _m_FileWriter_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("FileWriter.startFor")
+def _m_FileWriter_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("FileWriter.stop")
+def _m_FileWriter_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("FileWriter.abort")
+def _m_FileWriter_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("FileWriter.isRunning")
+def _m_FileWriter_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("FileWriter.getCaptureDuration")
+def _m_FileWriter_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("FileWriter.getConfiguration")
+def _m_FileWriter_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("FileWriter.split")
 def _m_FileWriter_split(ctx: HandlerContext, params):
@@ -1677,6 +2237,51 @@ def _m_FlimFrameInfo_valid(ctx: HandlerContext, params):
 def _m_FlimFrameInfo_discard(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.discard()
+
+@handler("Flim.clear")
+def _m_Flim_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Flim.start")
+def _m_Flim_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Flim.startFor")
+def _m_Flim_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Flim.stop")
+def _m_Flim_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Flim.abort")
+def _m_Flim_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Flim.isRunning")
+def _m_Flim_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Flim.getCaptureDuration")
+def _m_Flim_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Flim.getConfiguration")
+def _m_Flim_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
+@handler("Flim.isAcquiring")
+def _m_Flim_isAcquiring(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isAcquiring()
 
 @handler("Flim.getCurrentFrame")
 def _m_Flim_getCurrentFrame(ctx: HandlerContext, params):
@@ -1821,11 +2426,91 @@ def _m_FrequencyCounterData_discard(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.discard()
 
+@handler("FrequencyCounter.clear")
+def _m_FrequencyCounter_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("FrequencyCounter.start")
+def _m_FrequencyCounter_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("FrequencyCounter.startFor")
+def _m_FrequencyCounter_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("FrequencyCounter.stop")
+def _m_FrequencyCounter_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("FrequencyCounter.abort")
+def _m_FrequencyCounter_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("FrequencyCounter.isRunning")
+def _m_FrequencyCounter_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("FrequencyCounter.getCaptureDuration")
+def _m_FrequencyCounter_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("FrequencyCounter.getConfiguration")
+def _m_FrequencyCounter_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
 @handler("FrequencyCounter.getDataObject")
 def _m_FrequencyCounter_getDataObject(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     result = obj.getDataObject(params[1], params[2], params[3])
     return _register(result, 'FrequencyCounterData', ctx.session_id, ctx.registry, ctx.sessions)
+
+@handler("FrequencyMultiplier.clear")
+def _m_FrequencyMultiplier_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("FrequencyMultiplier.start")
+def _m_FrequencyMultiplier_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("FrequencyMultiplier.startFor")
+def _m_FrequencyMultiplier_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("FrequencyMultiplier.stop")
+def _m_FrequencyMultiplier_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("FrequencyMultiplier.abort")
+def _m_FrequencyMultiplier_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("FrequencyMultiplier.isRunning")
+def _m_FrequencyMultiplier_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("FrequencyMultiplier.getCaptureDuration")
+def _m_FrequencyMultiplier_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("FrequencyMultiplier.getConfiguration")
+def _m_FrequencyMultiplier_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("FrequencyMultiplier.getChannel")
 def _m_FrequencyMultiplier_getChannel(ctx: HandlerContext, params):
@@ -1902,11 +2587,91 @@ def _m_FrequencyStabilityData_discard(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.discard()
 
+@handler("FrequencyStability.clear")
+def _m_FrequencyStability_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("FrequencyStability.start")
+def _m_FrequencyStability_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("FrequencyStability.startFor")
+def _m_FrequencyStability_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("FrequencyStability.stop")
+def _m_FrequencyStability_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("FrequencyStability.abort")
+def _m_FrequencyStability_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("FrequencyStability.isRunning")
+def _m_FrequencyStability_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("FrequencyStability.getCaptureDuration")
+def _m_FrequencyStability_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("FrequencyStability.getConfiguration")
+def _m_FrequencyStability_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
 @handler("FrequencyStability.getDataObject")
 def _m_FrequencyStability_getDataObject(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     result = obj.getDataObject()
     return _register(result, 'FrequencyStabilityData', ctx.session_id, ctx.registry, ctx.sessions)
+
+@handler("GatedChannel.clear")
+def _m_GatedChannel_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("GatedChannel.start")
+def _m_GatedChannel_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("GatedChannel.startFor")
+def _m_GatedChannel_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("GatedChannel.stop")
+def _m_GatedChannel_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("GatedChannel.abort")
+def _m_GatedChannel_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("GatedChannel.isRunning")
+def _m_GatedChannel_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("GatedChannel.getCaptureDuration")
+def _m_GatedChannel_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("GatedChannel.getConfiguration")
+def _m_GatedChannel_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("GatedChannel.getChannel")
 def _m_GatedChannel_getChannel(ctx: HandlerContext, params):
@@ -1943,6 +2708,46 @@ def _m_HistogramLogBinsData_discard(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.discard()
 
+@handler("HistogramLogBins.clear")
+def _m_HistogramLogBins_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("HistogramLogBins.start")
+def _m_HistogramLogBins_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("HistogramLogBins.startFor")
+def _m_HistogramLogBins_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("HistogramLogBins.stop")
+def _m_HistogramLogBins_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("HistogramLogBins.abort")
+def _m_HistogramLogBins_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("HistogramLogBins.isRunning")
+def _m_HistogramLogBins_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("HistogramLogBins.getCaptureDuration")
+def _m_HistogramLogBins_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("HistogramLogBins.getConfiguration")
+def _m_HistogramLogBins_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
 @handler("HistogramLogBins.getDataObject")
 def _m_HistogramLogBins_getDataObject(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -1969,6 +2774,46 @@ def _m_HistogramLogBins_getDataNormalizedG2(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return _pack_ndarray(obj.getDataNormalizedG2())
 
+@handler("Histogram2D.clear")
+def _m_Histogram2D_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Histogram2D.start")
+def _m_Histogram2D_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Histogram2D.startFor")
+def _m_Histogram2D_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Histogram2D.stop")
+def _m_Histogram2D_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Histogram2D.abort")
+def _m_Histogram2D_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Histogram2D.isRunning")
+def _m_Histogram2D_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Histogram2D.getCaptureDuration")
+def _m_Histogram2D_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Histogram2D.getConfiguration")
+def _m_Histogram2D_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
 @handler("Histogram2D.getData")
 def _m_Histogram2D_getData(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -1989,6 +2834,46 @@ def _m_Histogram2D_getIndex_2(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return _pack_ndarray(obj.getIndex_2())
 
+@handler("HistogramND.clear")
+def _m_HistogramND_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("HistogramND.start")
+def _m_HistogramND_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("HistogramND.startFor")
+def _m_HistogramND_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("HistogramND.stop")
+def _m_HistogramND_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("HistogramND.abort")
+def _m_HistogramND_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("HistogramND.isRunning")
+def _m_HistogramND_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("HistogramND.getCaptureDuration")
+def _m_HistogramND_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("HistogramND.getConfiguration")
+def _m_HistogramND_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
 @handler("HistogramND.getData")
 def _m_HistogramND_getData(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -1999,6 +2884,46 @@ def _m_HistogramND_getIndex(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return _pack_ndarray(obj.getIndex(params[1]))
 
+@handler("Experimental_MarkovProcessGenerator.clear")
+def _m_Experimental_MarkovProcessGenerator_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Experimental_MarkovProcessGenerator.start")
+def _m_Experimental_MarkovProcessGenerator_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Experimental_MarkovProcessGenerator.startFor")
+def _m_Experimental_MarkovProcessGenerator_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Experimental_MarkovProcessGenerator.stop")
+def _m_Experimental_MarkovProcessGenerator_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Experimental_MarkovProcessGenerator.abort")
+def _m_Experimental_MarkovProcessGenerator_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Experimental_MarkovProcessGenerator.isRunning")
+def _m_Experimental_MarkovProcessGenerator_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Experimental_MarkovProcessGenerator.getCaptureDuration")
+def _m_Experimental_MarkovProcessGenerator_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Experimental_MarkovProcessGenerator.getConfiguration")
+def _m_Experimental_MarkovProcessGenerator_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
 @handler("Experimental_MarkovProcessGenerator.getChannel")
 def _m_Experimental_MarkovProcessGenerator_getChannel(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -2008,6 +2933,46 @@ def _m_Experimental_MarkovProcessGenerator_getChannel(ctx: HandlerContext, param
 def _m_Experimental_MarkovProcessGenerator_getChannels(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getChannels()
+
+@handler("OverflowInjector.clear")
+def _m_OverflowInjector_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("OverflowInjector.start")
+def _m_OverflowInjector_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("OverflowInjector.startFor")
+def _m_OverflowInjector_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("OverflowInjector.stop")
+def _m_OverflowInjector_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("OverflowInjector.abort")
+def _m_OverflowInjector_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("OverflowInjector.isRunning")
+def _m_OverflowInjector_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("OverflowInjector.getCaptureDuration")
+def _m_OverflowInjector_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("OverflowInjector.getConfiguration")
+def _m_OverflowInjector_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("PhaseNoiseData.getPhaseNoise")
 def _m_PhaseNoiseData_getPhaseNoise(ctx: HandlerContext, params):
@@ -2039,11 +3004,91 @@ def _m_PhaseNoiseData_discard(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.discard()
 
+@handler("PhaseNoise.clear")
+def _m_PhaseNoise_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("PhaseNoise.start")
+def _m_PhaseNoise_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("PhaseNoise.startFor")
+def _m_PhaseNoise_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("PhaseNoise.stop")
+def _m_PhaseNoise_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("PhaseNoise.abort")
+def _m_PhaseNoise_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("PhaseNoise.isRunning")
+def _m_PhaseNoise_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("PhaseNoise.getCaptureDuration")
+def _m_PhaseNoise_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("PhaseNoise.getConfiguration")
+def _m_PhaseNoise_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
 @handler("PhaseNoise.getDataObject")
 def _m_PhaseNoise_getDataObject(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     result = obj.getDataObject()
     return _register(result, 'PhaseNoiseData', ctx.session_id, ctx.registry, ctx.sessions)
+
+@handler("Experimental_PhotonNumber.clear")
+def _m_Experimental_PhotonNumber_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Experimental_PhotonNumber.start")
+def _m_Experimental_PhotonNumber_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Experimental_PhotonNumber.startFor")
+def _m_Experimental_PhotonNumber_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Experimental_PhotonNumber.stop")
+def _m_Experimental_PhotonNumber_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Experimental_PhotonNumber.abort")
+def _m_Experimental_PhotonNumber_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Experimental_PhotonNumber.isRunning")
+def _m_Experimental_PhotonNumber_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Experimental_PhotonNumber.getCaptureDuration")
+def _m_Experimental_PhotonNumber_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Experimental_PhotonNumber.getConfiguration")
+def _m_Experimental_PhotonNumber_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("Experimental_PhotonNumber.getChannels")
 def _m_Experimental_PhotonNumber_getChannels(ctx: HandlerContext, params):
@@ -2090,11 +3135,91 @@ def _m_Experimental_PulsePerSecondData_discard(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.discard()
 
+@handler("Experimental_PulsePerSecondMonitor.clear")
+def _m_Experimental_PulsePerSecondMonitor_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Experimental_PulsePerSecondMonitor.start")
+def _m_Experimental_PulsePerSecondMonitor_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Experimental_PulsePerSecondMonitor.startFor")
+def _m_Experimental_PulsePerSecondMonitor_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Experimental_PulsePerSecondMonitor.stop")
+def _m_Experimental_PulsePerSecondMonitor_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Experimental_PulsePerSecondMonitor.abort")
+def _m_Experimental_PulsePerSecondMonitor_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Experimental_PulsePerSecondMonitor.isRunning")
+def _m_Experimental_PulsePerSecondMonitor_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Experimental_PulsePerSecondMonitor.getCaptureDuration")
+def _m_Experimental_PulsePerSecondMonitor_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Experimental_PulsePerSecondMonitor.getConfiguration")
+def _m_Experimental_PulsePerSecondMonitor_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
 @handler("Experimental_PulsePerSecondMonitor.getDataObject")
 def _m_Experimental_PulsePerSecondMonitor_getDataObject(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     result = obj.getDataObject(params[1])
     return _register(result, 'Experimental_PulsePerSecondData', ctx.session_id, ctx.registry, ctx.sessions)
+
+@handler("Sampler.clear")
+def _m_Sampler_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Sampler.start")
+def _m_Sampler_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Sampler.startFor")
+def _m_Sampler_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Sampler.stop")
+def _m_Sampler_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Sampler.abort")
+def _m_Sampler_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Sampler.isRunning")
+def _m_Sampler_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Sampler.getCaptureDuration")
+def _m_Sampler_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Sampler.getConfiguration")
+def _m_Sampler_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("Sampler.getData")
 def _m_Sampler_getData(ctx: HandlerContext, params):
@@ -2105,6 +3230,46 @@ def _m_Sampler_getData(ctx: HandlerContext, params):
 def _m_Sampler_getDataAsMask(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return _pack_ndarray(obj.getDataAsMask())
+
+@handler("Scope.clear")
+def _m_Scope_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Scope.start")
+def _m_Scope_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Scope.startFor")
+def _m_Scope_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Scope.stop")
+def _m_Scope_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Scope.abort")
+def _m_Scope_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Scope.isRunning")
+def _m_Scope_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Scope.getCaptureDuration")
+def _m_Scope_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Scope.getConfiguration")
+def _m_Scope_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("Scope.getData")
 def _m_Scope_getData(ctx: HandlerContext, params):
@@ -2126,6 +3291,361 @@ def _m_Scope_getWindowSize(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getWindowSize()
 
+@handler("Experimental_UniformSignalGenerator.clear")
+def _m_Experimental_UniformSignalGenerator_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Experimental_UniformSignalGenerator.start")
+def _m_Experimental_UniformSignalGenerator_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Experimental_UniformSignalGenerator.startFor")
+def _m_Experimental_UniformSignalGenerator_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Experimental_UniformSignalGenerator.stop")
+def _m_Experimental_UniformSignalGenerator_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Experimental_UniformSignalGenerator.abort")
+def _m_Experimental_UniformSignalGenerator_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Experimental_UniformSignalGenerator.isRunning")
+def _m_Experimental_UniformSignalGenerator_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Experimental_UniformSignalGenerator.getCaptureDuration")
+def _m_Experimental_UniformSignalGenerator_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Experimental_UniformSignalGenerator.getConfiguration")
+def _m_Experimental_UniformSignalGenerator_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
+@handler("Experimental_UniformSignalGenerator.getChannel")
+def _m_Experimental_UniformSignalGenerator_getChannel(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getChannel()
+
+@handler("Experimental_GaussianSignalGenerator.clear")
+def _m_Experimental_GaussianSignalGenerator_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Experimental_GaussianSignalGenerator.start")
+def _m_Experimental_GaussianSignalGenerator_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Experimental_GaussianSignalGenerator.startFor")
+def _m_Experimental_GaussianSignalGenerator_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Experimental_GaussianSignalGenerator.stop")
+def _m_Experimental_GaussianSignalGenerator_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Experimental_GaussianSignalGenerator.abort")
+def _m_Experimental_GaussianSignalGenerator_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Experimental_GaussianSignalGenerator.isRunning")
+def _m_Experimental_GaussianSignalGenerator_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Experimental_GaussianSignalGenerator.getCaptureDuration")
+def _m_Experimental_GaussianSignalGenerator_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Experimental_GaussianSignalGenerator.getConfiguration")
+def _m_Experimental_GaussianSignalGenerator_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
+@handler("Experimental_GaussianSignalGenerator.getChannel")
+def _m_Experimental_GaussianSignalGenerator_getChannel(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getChannel()
+
+@handler("Experimental_OscillatorSimulation.clear")
+def _m_Experimental_OscillatorSimulation_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Experimental_OscillatorSimulation.start")
+def _m_Experimental_OscillatorSimulation_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Experimental_OscillatorSimulation.startFor")
+def _m_Experimental_OscillatorSimulation_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Experimental_OscillatorSimulation.stop")
+def _m_Experimental_OscillatorSimulation_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Experimental_OscillatorSimulation.abort")
+def _m_Experimental_OscillatorSimulation_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Experimental_OscillatorSimulation.isRunning")
+def _m_Experimental_OscillatorSimulation_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Experimental_OscillatorSimulation.getCaptureDuration")
+def _m_Experimental_OscillatorSimulation_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Experimental_OscillatorSimulation.getConfiguration")
+def _m_Experimental_OscillatorSimulation_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
+@handler("Experimental_OscillatorSimulation.getChannel")
+def _m_Experimental_OscillatorSimulation_getChannel(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getChannel()
+
+@handler("Experimental_TwoStateExponentialSignalGenerator.clear")
+def _m_Experimental_TwoStateExponentialSignalGenerator_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Experimental_TwoStateExponentialSignalGenerator.start")
+def _m_Experimental_TwoStateExponentialSignalGenerator_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Experimental_TwoStateExponentialSignalGenerator.startFor")
+def _m_Experimental_TwoStateExponentialSignalGenerator_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Experimental_TwoStateExponentialSignalGenerator.stop")
+def _m_Experimental_TwoStateExponentialSignalGenerator_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Experimental_TwoStateExponentialSignalGenerator.abort")
+def _m_Experimental_TwoStateExponentialSignalGenerator_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Experimental_TwoStateExponentialSignalGenerator.isRunning")
+def _m_Experimental_TwoStateExponentialSignalGenerator_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Experimental_TwoStateExponentialSignalGenerator.getCaptureDuration")
+def _m_Experimental_TwoStateExponentialSignalGenerator_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Experimental_TwoStateExponentialSignalGenerator.getConfiguration")
+def _m_Experimental_TwoStateExponentialSignalGenerator_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
+@handler("Experimental_TwoStateExponentialSignalGenerator.getChannel")
+def _m_Experimental_TwoStateExponentialSignalGenerator_getChannel(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getChannel()
+
+@handler("Experimental_ExponentialSignalGenerator.clear")
+def _m_Experimental_ExponentialSignalGenerator_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Experimental_ExponentialSignalGenerator.start")
+def _m_Experimental_ExponentialSignalGenerator_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Experimental_ExponentialSignalGenerator.startFor")
+def _m_Experimental_ExponentialSignalGenerator_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Experimental_ExponentialSignalGenerator.stop")
+def _m_Experimental_ExponentialSignalGenerator_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Experimental_ExponentialSignalGenerator.abort")
+def _m_Experimental_ExponentialSignalGenerator_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Experimental_ExponentialSignalGenerator.isRunning")
+def _m_Experimental_ExponentialSignalGenerator_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Experimental_ExponentialSignalGenerator.getCaptureDuration")
+def _m_Experimental_ExponentialSignalGenerator_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Experimental_ExponentialSignalGenerator.getConfiguration")
+def _m_Experimental_ExponentialSignalGenerator_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
+@handler("Experimental_ExponentialSignalGenerator.getChannel")
+def _m_Experimental_ExponentialSignalGenerator_getChannel(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getChannel()
+
+@handler("Experimental_GammaSignalGenerator.clear")
+def _m_Experimental_GammaSignalGenerator_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Experimental_GammaSignalGenerator.start")
+def _m_Experimental_GammaSignalGenerator_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Experimental_GammaSignalGenerator.startFor")
+def _m_Experimental_GammaSignalGenerator_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Experimental_GammaSignalGenerator.stop")
+def _m_Experimental_GammaSignalGenerator_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Experimental_GammaSignalGenerator.abort")
+def _m_Experimental_GammaSignalGenerator_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Experimental_GammaSignalGenerator.isRunning")
+def _m_Experimental_GammaSignalGenerator_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Experimental_GammaSignalGenerator.getCaptureDuration")
+def _m_Experimental_GammaSignalGenerator_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Experimental_GammaSignalGenerator.getConfiguration")
+def _m_Experimental_GammaSignalGenerator_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
+@handler("Experimental_GammaSignalGenerator.getChannel")
+def _m_Experimental_GammaSignalGenerator_getChannel(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getChannel()
+
+@handler("Experimental_PatternSignalGenerator.clear")
+def _m_Experimental_PatternSignalGenerator_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Experimental_PatternSignalGenerator.start")
+def _m_Experimental_PatternSignalGenerator_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Experimental_PatternSignalGenerator.startFor")
+def _m_Experimental_PatternSignalGenerator_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Experimental_PatternSignalGenerator.stop")
+def _m_Experimental_PatternSignalGenerator_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Experimental_PatternSignalGenerator.abort")
+def _m_Experimental_PatternSignalGenerator_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Experimental_PatternSignalGenerator.isRunning")
+def _m_Experimental_PatternSignalGenerator_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Experimental_PatternSignalGenerator.getCaptureDuration")
+def _m_Experimental_PatternSignalGenerator_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Experimental_PatternSignalGenerator.getConfiguration")
+def _m_Experimental_PatternSignalGenerator_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
+@handler("Experimental_PatternSignalGenerator.getChannel")
+def _m_Experimental_PatternSignalGenerator_getChannel(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getChannel()
+
+@handler("Experimental_SimSignalSplitter.clear")
+def _m_Experimental_SimSignalSplitter_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Experimental_SimSignalSplitter.start")
+def _m_Experimental_SimSignalSplitter_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Experimental_SimSignalSplitter.startFor")
+def _m_Experimental_SimSignalSplitter_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Experimental_SimSignalSplitter.stop")
+def _m_Experimental_SimSignalSplitter_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Experimental_SimSignalSplitter.abort")
+def _m_Experimental_SimSignalSplitter_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Experimental_SimSignalSplitter.isRunning")
+def _m_Experimental_SimSignalSplitter_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Experimental_SimSignalSplitter.getCaptureDuration")
+def _m_Experimental_SimSignalSplitter_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Experimental_SimSignalSplitter.getConfiguration")
+def _m_Experimental_SimSignalSplitter_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
 @handler("Experimental_SimSignalSplitter.getChannels")
 def _m_Experimental_SimSignalSplitter_getChannels(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -2141,20 +3661,180 @@ def _m_Experimental_SimSignalSplitter_getRightChannel(ctx: HandlerContext, param
     obj = _lookup(ctx.registry, params[0])
     return obj.getRightChannel()
 
+@handler("Experimental_TransformEfficiency.clear")
+def _m_Experimental_TransformEfficiency_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Experimental_TransformEfficiency.start")
+def _m_Experimental_TransformEfficiency_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Experimental_TransformEfficiency.startFor")
+def _m_Experimental_TransformEfficiency_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Experimental_TransformEfficiency.stop")
+def _m_Experimental_TransformEfficiency_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Experimental_TransformEfficiency.abort")
+def _m_Experimental_TransformEfficiency_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Experimental_TransformEfficiency.isRunning")
+def _m_Experimental_TransformEfficiency_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Experimental_TransformEfficiency.getCaptureDuration")
+def _m_Experimental_TransformEfficiency_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Experimental_TransformEfficiency.getConfiguration")
+def _m_Experimental_TransformEfficiency_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
 @handler("Experimental_TransformEfficiency.getChannel")
 def _m_Experimental_TransformEfficiency_getChannel(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getChannel()
+
+@handler("Experimental_TransformGaussianBroadening.clear")
+def _m_Experimental_TransformGaussianBroadening_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Experimental_TransformGaussianBroadening.start")
+def _m_Experimental_TransformGaussianBroadening_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Experimental_TransformGaussianBroadening.startFor")
+def _m_Experimental_TransformGaussianBroadening_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Experimental_TransformGaussianBroadening.stop")
+def _m_Experimental_TransformGaussianBroadening_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Experimental_TransformGaussianBroadening.abort")
+def _m_Experimental_TransformGaussianBroadening_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Experimental_TransformGaussianBroadening.isRunning")
+def _m_Experimental_TransformGaussianBroadening_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Experimental_TransformGaussianBroadening.getCaptureDuration")
+def _m_Experimental_TransformGaussianBroadening_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Experimental_TransformGaussianBroadening.getConfiguration")
+def _m_Experimental_TransformGaussianBroadening_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("Experimental_TransformGaussianBroadening.getChannel")
 def _m_Experimental_TransformGaussianBroadening_getChannel(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getChannel()
 
+@handler("Experimental_TransformDeadtime.clear")
+def _m_Experimental_TransformDeadtime_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Experimental_TransformDeadtime.start")
+def _m_Experimental_TransformDeadtime_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Experimental_TransformDeadtime.startFor")
+def _m_Experimental_TransformDeadtime_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Experimental_TransformDeadtime.stop")
+def _m_Experimental_TransformDeadtime_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Experimental_TransformDeadtime.abort")
+def _m_Experimental_TransformDeadtime_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Experimental_TransformDeadtime.isRunning")
+def _m_Experimental_TransformDeadtime_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Experimental_TransformDeadtime.getCaptureDuration")
+def _m_Experimental_TransformDeadtime_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Experimental_TransformDeadtime.getConfiguration")
+def _m_Experimental_TransformDeadtime_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
 @handler("Experimental_TransformDeadtime.getChannel")
 def _m_Experimental_TransformDeadtime_getChannel(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getChannel()
+
+@handler("Experimental_TransformCrosstalk.clear")
+def _m_Experimental_TransformCrosstalk_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Experimental_TransformCrosstalk.start")
+def _m_Experimental_TransformCrosstalk_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Experimental_TransformCrosstalk.startFor")
+def _m_Experimental_TransformCrosstalk_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Experimental_TransformCrosstalk.stop")
+def _m_Experimental_TransformCrosstalk_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Experimental_TransformCrosstalk.abort")
+def _m_Experimental_TransformCrosstalk_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Experimental_TransformCrosstalk.isRunning")
+def _m_Experimental_TransformCrosstalk_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Experimental_TransformCrosstalk.getCaptureDuration")
+def _m_Experimental_TransformCrosstalk_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Experimental_TransformCrosstalk.getConfiguration")
+def _m_Experimental_TransformCrosstalk_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("Experimental_TransformCrosstalk.getChannel")
 def _m_Experimental_TransformCrosstalk_getChannel(ctx: HandlerContext, params):
@@ -2165,6 +3845,46 @@ def _m_Experimental_TransformCrosstalk_getChannel(ctx: HandlerContext, params):
 def _m_Experimental_SimDetector_getChannel(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getChannel()
+
+@handler("Experimental_SimLifetime.clear")
+def _m_Experimental_SimLifetime_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Experimental_SimLifetime.start")
+def _m_Experimental_SimLifetime_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Experimental_SimLifetime.startFor")
+def _m_Experimental_SimLifetime_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Experimental_SimLifetime.stop")
+def _m_Experimental_SimLifetime_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Experimental_SimLifetime.abort")
+def _m_Experimental_SimLifetime_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Experimental_SimLifetime.isRunning")
+def _m_Experimental_SimLifetime_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Experimental_SimLifetime.getCaptureDuration")
+def _m_Experimental_SimLifetime_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Experimental_SimLifetime.getConfiguration")
+def _m_Experimental_SimLifetime_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("Experimental_SimLifetime.getChannel")
 def _m_Experimental_SimLifetime_getChannel(ctx: HandlerContext, params):
@@ -2180,6 +3900,46 @@ def _m_Experimental_SimLifetime_registerLifetimeReactor(ctx: HandlerContext, par
 def _m_Experimental_SimLifetime_registerEmissionReactor(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.registerEmissionReactor(params[1], params[2], params[3])
+
+@handler("StartStop.clear")
+def _m_StartStop_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("StartStop.start")
+def _m_StartStop_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("StartStop.startFor")
+def _m_StartStop_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("StartStop.stop")
+def _m_StartStop_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("StartStop.abort")
+def _m_StartStop_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("StartStop.isRunning")
+def _m_StartStop_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("StartStop.getCaptureDuration")
+def _m_StartStop_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("StartStop.getConfiguration")
+def _m_StartStop_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("StartStop.getData")
 def _m_StartStop_getData(ctx: HandlerContext, params):
@@ -2220,17 +3980,57 @@ def _m_SynchronizedMeasurements_isRunning(ctx: HandlerContext, params):
 @handler("SynchronizedMeasurements.registerMeasurement")
 def _m_SynchronizedMeasurements_registerMeasurement(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
-    return obj.registerMeasurement(params[1])
+    return obj.registerMeasurement(_lookup(ctx.registry, params[1]))
 
 @handler("SynchronizedMeasurements.unregisterMeasurement")
 def _m_SynchronizedMeasurements_unregisterMeasurement(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
-    return obj.unregisterMeasurement(params[1])
+    return obj.unregisterMeasurement(_lookup(ctx.registry, params[1]))
 
 @handler("SynchronizedMeasurements.waitUntilFinished")
 def _m_SynchronizedMeasurements_waitUntilFinished(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.waitUntilFinished(params[1])
+
+@handler("SyntheticSingleTag.clear")
+def _m_SyntheticSingleTag_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("SyntheticSingleTag.start")
+def _m_SyntheticSingleTag_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("SyntheticSingleTag.startFor")
+def _m_SyntheticSingleTag_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("SyntheticSingleTag.stop")
+def _m_SyntheticSingleTag_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("SyntheticSingleTag.abort")
+def _m_SyntheticSingleTag_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("SyntheticSingleTag.isRunning")
+def _m_SyntheticSingleTag_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("SyntheticSingleTag.getCaptureDuration")
+def _m_SyntheticSingleTag_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("SyntheticSingleTag.getConfiguration")
+def _m_SyntheticSingleTag_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("SyntheticSingleTag.trigger")
 def _m_SyntheticSingleTag_trigger(ctx: HandlerContext, params):
@@ -2241,6 +4041,46 @@ def _m_SyntheticSingleTag_trigger(ctx: HandlerContext, params):
 def _m_SyntheticSingleTag_getChannel(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getChannel()
+
+@handler("TimeDifferences.clear")
+def _m_TimeDifferences_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("TimeDifferences.start")
+def _m_TimeDifferences_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("TimeDifferences.startFor")
+def _m_TimeDifferences_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("TimeDifferences.stop")
+def _m_TimeDifferences_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("TimeDifferences.abort")
+def _m_TimeDifferences_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("TimeDifferences.isRunning")
+def _m_TimeDifferences_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("TimeDifferences.getCaptureDuration")
+def _m_TimeDifferences_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("TimeDifferences.getConfiguration")
+def _m_TimeDifferences_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("TimeDifferences.getData")
 def _m_TimeDifferences_getData(ctx: HandlerContext, params):
@@ -2277,6 +4117,46 @@ def _m_TimeDifferences_ready(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.ready()
 
+@handler("Histogram.clear")
+def _m_Histogram_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("Histogram.start")
+def _m_Histogram_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("Histogram.startFor")
+def _m_Histogram_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("Histogram.stop")
+def _m_Histogram_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("Histogram.abort")
+def _m_Histogram_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("Histogram.isRunning")
+def _m_Histogram_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("Histogram.getCaptureDuration")
+def _m_Histogram_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("Histogram.getConfiguration")
+def _m_Histogram_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
+
 @handler("Histogram.getData")
 def _m_Histogram_getData(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -2286,6 +4166,46 @@ def _m_Histogram_getData(ctx: HandlerContext, params):
 def _m_Histogram_getIndex(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return _pack_ndarray(obj.getIndex())
+
+@handler("TimeDifferencesND.clear")
+def _m_TimeDifferencesND_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("TimeDifferencesND.start")
+def _m_TimeDifferencesND_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("TimeDifferencesND.startFor")
+def _m_TimeDifferencesND_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("TimeDifferencesND.stop")
+def _m_TimeDifferencesND_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("TimeDifferencesND.abort")
+def _m_TimeDifferencesND_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("TimeDifferencesND.isRunning")
+def _m_TimeDifferencesND_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("TimeDifferencesND.getCaptureDuration")
+def _m_TimeDifferencesND_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("TimeDifferencesND.getConfiguration")
+def _m_TimeDifferencesND_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("TimeDifferencesND.getData")
 def _m_TimeDifferencesND_getData(ctx: HandlerContext, params):
@@ -2311,6 +4231,46 @@ def _m_TimeDifferencesND_getHistogramIndex(ctx: HandlerContext, params):
 def _m_TimeDifferencesND_getRollovers(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return _pack_ndarray(obj.getRollovers())
+
+@handler("TimeTagStream.clear")
+def _m_TimeTagStream_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("TimeTagStream.start")
+def _m_TimeTagStream_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("TimeTagStream.startFor")
+def _m_TimeTagStream_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("TimeTagStream.stop")
+def _m_TimeTagStream_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("TimeTagStream.abort")
+def _m_TimeTagStream_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("TimeTagStream.isRunning")
+def _m_TimeTagStream_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("TimeTagStream.getCaptureDuration")
+def _m_TimeTagStream_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("TimeTagStream.getConfiguration")
+def _m_TimeTagStream_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("TimeTagStream.getData")
 def _m_TimeTagStream_getData(ctx: HandlerContext, params):
@@ -2372,6 +4332,46 @@ def _m_TimeTagStreamBuffer_tGetData(ctx: HandlerContext, params):
 def _m_TimeTagStreamBuffer_discard(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.discard()
+
+@handler("TriggerOnCountrate.clear")
+def _m_TriggerOnCountrate_clear(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.clear()
+
+@handler("TriggerOnCountrate.start")
+def _m_TriggerOnCountrate_start(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.start()
+
+@handler("TriggerOnCountrate.startFor")
+def _m_TriggerOnCountrate_startFor(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.startFor(params[1], params[2])
+
+@handler("TriggerOnCountrate.stop")
+def _m_TriggerOnCountrate_stop(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.stop()
+
+@handler("TriggerOnCountrate.abort")
+def _m_TriggerOnCountrate_abort(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.abort()
+
+@handler("TriggerOnCountrate.isRunning")
+def _m_TriggerOnCountrate_isRunning(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.isRunning()
+
+@handler("TriggerOnCountrate.getCaptureDuration")
+def _m_TriggerOnCountrate_getCaptureDuration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getCaptureDuration()
+
+@handler("TriggerOnCountrate.getConfiguration")
+def _m_TriggerOnCountrate_getConfiguration(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.getConfiguration()
 
 @handler("TriggerOnCountrate.getChannelAbove")
 def _m_TriggerOnCountrate_getChannelAbove(ctx: HandlerContext, params):

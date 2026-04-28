@@ -162,7 +162,9 @@ class SchemaBuilder:
         self.bl         = blocklist
         self.excluded_classes   = set(blocklist.get("excluded_classes", {}).keys())
         self.excluded_functions = set(blocklist.get("excluded_functions", {}).keys())
-        self.abstract_bases     = set(blocklist.get("abstract_bases", {}).get("classes", []))
+        # self.abstract_bases     = set(blocklist.get("abstract_bases", {}).get("classes", []))
+        excluded = blocklist.get("excluded_classes", {})
+        self.abstract_bases = {k for k , v in excluded.items() if v== 'abstract'}
         self.data_object_classes= set(blocklist.get("data_object_classes", {}).get("classes", []))
         self.ndarray_returns    = blocklist.get("type_overrides", {}).get("ndarray_returns", {})
         self.handle_returns     = blocklist.get("type_overrides", {}).get("handle_returns", {})
