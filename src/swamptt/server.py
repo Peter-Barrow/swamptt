@@ -5,10 +5,12 @@ import logging.handlers
 import queue
 import sys
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
 
 import msgpack
+from dc_parse import create_config_hierarchy
 
-from .server_handlers import HANDLERS, HandlerContext, _lookup
+from .server_handlers import HANDLERS, HandlerContext
 
 registry = {
     '_counter': itertools.count(1),  # look up counter when requesting a ctor,
@@ -91,12 +93,21 @@ async def handle_client(
         writer.close()
 
 
-async def _async_main():
+@dataclass
+class ServerConfig:
+    server_name: str = 'swamptt-server'
+    workers: int = 1
+    ip_addr: str = 'localhost'
+    port: int = 9000
+
+
+async def _async_main(config: ServerConfig):
     global executor
     executor = ThreadPoolExecutor(
-        max_workers=4,
-        thread_name_prefix='swamptt-server-worker',
+        max_workers=config.workers,
+        thread_name_prefix=f'{config.server_name}-worker',
     )
+    logger.info(f'Server initialised with {config.workers} worker(s)')
 
     # Add this if you want to use run_in_executor(None, ...) elsewhere —
     # "None" means "use the default", so this makes your named executor
@@ -104,19 +115,52 @@ async def _async_main():
     loop = asyncio.get_running_loop()
     loop.set_default_executor(executor)
 
-    port = 9000
-    server = await asyncio.start_server(handle_client, '0.0.0.0', port)
-    logger.info(f'Server listening on port {port}')
+    server = await asyncio.start_server(
+        handle_client,
+        config.ip_addr,
+        config.port,
+    )
+    logger.info(f'Server listening at {config.ip_addr}:{config.port}')
     async with server:
         await server.serve_forever()
 
 
+def _get_local_ip():
+    from socket import AF_INET, SOCK_DGRAM, socket
+    s = socket(AF_INET, SOCK_DGRAM)
+    local_ip : str | None = None
+    try:
+        s.connect(('8.8.8.8', 80))
+        local_ip = s.getsockname()[0]
+    finally:
+        s.close()
+
+    return local_ip
+
+
 def main():
+
+    parser, parse_fn = create_config_hierarchy(
+        ServerConfig,
+    )
+
+    config = parse_fn()
+    if config is None:
+        return
+
+    config = config['ServerConfig']
+
+    if config.ip_addr == 'localhost':
+        local_ip = _get_local_ip()
+        if local_ip is not None:
+            config.ip_addr = local_ip
+
+
     listener = _listener()
     listener.start()
-    logger.info('SWAMPTT server started')
+    logger.info(f'SWAMPTT server, "{config.server_name}", started')
     try:
-        asyncio.run(_async_main())
+        asyncio.run(_async_main(config))
     except KeyboardInterrupt:
         logger.info('Shutting down server')
     finally:
