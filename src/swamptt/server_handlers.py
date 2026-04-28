@@ -1340,6 +1340,11 @@ def _m_Coincidences_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("Coincidences.waitUntilFinished")
+def _m_Coincidences_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("Coincidences.getChannels")
 def _m_Coincidences_getChannels(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -1394,6 +1399,11 @@ def _m_Combinations_getCaptureDuration(ctx: HandlerContext, params):
 def _m_Combinations_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("Combinations.waitUntilFinished")
+def _m_Combinations_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("Combinations.getChannel")
 def _m_Combinations_getChannel(ctx: HandlerContext, params):
@@ -1460,6 +1470,11 @@ def _m_Combiner_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("Combiner.waitUntilFinished")
+def _m_Combiner_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("Combiner.getChannelCounts")
 def _m_Combiner_getChannelCounts(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -1515,6 +1530,11 @@ def _m_ConditionalFilterChannel_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("ConditionalFilterChannel.waitUntilFinished")
+def _m_ConditionalFilterChannel_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("ConditionalFilterChannel.getChannel")
 def _m_ConditionalFilterChannel_getChannel(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -1565,6 +1585,11 @@ def _m_ConstantFractionDiscriminator_getConfiguration(ctx: HandlerContext, param
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("ConstantFractionDiscriminator.waitUntilFinished")
+def _m_ConstantFractionDiscriminator_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("ConstantFractionDiscriminator.getChannels")
 def _m_ConstantFractionDiscriminator_getChannels(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -1609,6 +1634,11 @@ def _m_Correlation_getCaptureDuration(ctx: HandlerContext, params):
 def _m_Correlation_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("Correlation.waitUntilFinished")
+def _m_Correlation_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("Correlation.getData")
 def _m_Correlation_getData(ctx: HandlerContext, params):
@@ -1685,6 +1715,11 @@ def _m_CorrelationPairs_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("CorrelationPairs.waitUntilFinished")
+def _m_CorrelationPairs_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("CorrelationPairs.getDataObject")
 def _m_CorrelationPairs_getDataObject(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -1735,6 +1770,11 @@ def _m_CountBetweenMarkers_getCaptureDuration(ctx: HandlerContext, params):
 def _m_CountBetweenMarkers_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("CountBetweenMarkers.waitUntilFinished")
+def _m_CountBetweenMarkers_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("CountBetweenMarkers.getData")
 def _m_CountBetweenMarkers_getData(ctx: HandlerContext, params):
@@ -1856,6 +1896,11 @@ def _m_Counter_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("Counter.waitUntilFinished")
+def _m_Counter_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("Counter.getData")
 def _m_Counter_getData(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -1922,6 +1967,11 @@ def _m_Countrate_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("Countrate.waitUntilFinished")
+def _m_Countrate_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("Countrate.getData")
 def _m_Countrate_getData(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -1971,6 +2021,11 @@ def _m_DelayedChannels_getCaptureDuration(ctx: HandlerContext, params):
 def _m_DelayedChannels_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("DelayedChannels.waitUntilFinished")
+def _m_DelayedChannels_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("DelayedChannels.getChannels")
 def _m_DelayedChannels_getChannels(ctx: HandlerContext, params):
@@ -2027,6 +2082,11 @@ def _m_Dump_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("Dump.waitUntilFinished")
+def _m_Dump_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("EventGenerator.clear")
 def _m_EventGenerator_clear(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -2066,6 +2126,11 @@ def _m_EventGenerator_getCaptureDuration(ctx: HandlerContext, params):
 def _m_EventGenerator_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("EventGenerator.waitUntilFinished")
+def _m_EventGenerator_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("EventGenerator.getChannel")
 def _m_EventGenerator_getChannel(ctx: HandlerContext, params):
@@ -2137,6 +2202,11 @@ def _m_FileWriter_getCaptureDuration(ctx: HandlerContext, params):
 def _m_FileWriter_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("FileWriter.waitUntilFinished")
+def _m_FileWriter_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("FileWriter.split")
 def _m_FileWriter_split(ctx: HandlerContext, params):
@@ -2277,6 +2347,11 @@ def _m_Flim_getCaptureDuration(ctx: HandlerContext, params):
 def _m_Flim_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("Flim.waitUntilFinished")
+def _m_Flim_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("Flim.isAcquiring")
 def _m_Flim_isAcquiring(ctx: HandlerContext, params):
@@ -2466,6 +2541,11 @@ def _m_FrequencyCounter_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("FrequencyCounter.waitUntilFinished")
+def _m_FrequencyCounter_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("FrequencyCounter.getDataObject")
 def _m_FrequencyCounter_getDataObject(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -2511,6 +2591,11 @@ def _m_FrequencyMultiplier_getCaptureDuration(ctx: HandlerContext, params):
 def _m_FrequencyMultiplier_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("FrequencyMultiplier.waitUntilFinished")
+def _m_FrequencyMultiplier_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("FrequencyMultiplier.getChannel")
 def _m_FrequencyMultiplier_getChannel(ctx: HandlerContext, params):
@@ -2627,6 +2712,11 @@ def _m_FrequencyStability_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("FrequencyStability.waitUntilFinished")
+def _m_FrequencyStability_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("FrequencyStability.getDataObject")
 def _m_FrequencyStability_getDataObject(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -2672,6 +2762,11 @@ def _m_GatedChannel_getCaptureDuration(ctx: HandlerContext, params):
 def _m_GatedChannel_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("GatedChannel.waitUntilFinished")
+def _m_GatedChannel_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("GatedChannel.getChannel")
 def _m_GatedChannel_getChannel(ctx: HandlerContext, params):
@@ -2748,6 +2843,11 @@ def _m_HistogramLogBins_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("HistogramLogBins.waitUntilFinished")
+def _m_HistogramLogBins_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("HistogramLogBins.getDataObject")
 def _m_HistogramLogBins_getDataObject(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -2814,6 +2914,11 @@ def _m_Histogram2D_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("Histogram2D.waitUntilFinished")
+def _m_Histogram2D_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("Histogram2D.getData")
 def _m_Histogram2D_getData(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -2874,6 +2979,11 @@ def _m_HistogramND_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("HistogramND.waitUntilFinished")
+def _m_HistogramND_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("HistogramND.getData")
 def _m_HistogramND_getData(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -2924,6 +3034,11 @@ def _m_Experimental_MarkovProcessGenerator_getConfiguration(ctx: HandlerContext,
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("Experimental_MarkovProcessGenerator.waitUntilFinished")
+def _m_Experimental_MarkovProcessGenerator_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("Experimental_MarkovProcessGenerator.getChannel")
 def _m_Experimental_MarkovProcessGenerator_getChannel(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -2973,6 +3088,11 @@ def _m_OverflowInjector_getCaptureDuration(ctx: HandlerContext, params):
 def _m_OverflowInjector_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("OverflowInjector.waitUntilFinished")
+def _m_OverflowInjector_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("PhaseNoiseData.getPhaseNoise")
 def _m_PhaseNoiseData_getPhaseNoise(ctx: HandlerContext, params):
@@ -3044,6 +3164,11 @@ def _m_PhaseNoise_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("PhaseNoise.waitUntilFinished")
+def _m_PhaseNoise_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("PhaseNoise.getDataObject")
 def _m_PhaseNoise_getDataObject(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -3089,6 +3214,11 @@ def _m_Experimental_PhotonNumber_getCaptureDuration(ctx: HandlerContext, params)
 def _m_Experimental_PhotonNumber_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("Experimental_PhotonNumber.waitUntilFinished")
+def _m_Experimental_PhotonNumber_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("Experimental_PhotonNumber.getChannels")
 def _m_Experimental_PhotonNumber_getChannels(ctx: HandlerContext, params):
@@ -3175,6 +3305,11 @@ def _m_Experimental_PulsePerSecondMonitor_getConfiguration(ctx: HandlerContext, 
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("Experimental_PulsePerSecondMonitor.waitUntilFinished")
+def _m_Experimental_PulsePerSecondMonitor_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("Experimental_PulsePerSecondMonitor.getDataObject")
 def _m_Experimental_PulsePerSecondMonitor_getDataObject(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -3220,6 +3355,11 @@ def _m_Sampler_getCaptureDuration(ctx: HandlerContext, params):
 def _m_Sampler_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("Sampler.waitUntilFinished")
+def _m_Sampler_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("Sampler.getData")
 def _m_Sampler_getData(ctx: HandlerContext, params):
@@ -3270,6 +3410,11 @@ def _m_Scope_getCaptureDuration(ctx: HandlerContext, params):
 def _m_Scope_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("Scope.waitUntilFinished")
+def _m_Scope_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("Scope.getData")
 def _m_Scope_getData(ctx: HandlerContext, params):
@@ -3331,6 +3476,11 @@ def _m_Experimental_UniformSignalGenerator_getConfiguration(ctx: HandlerContext,
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("Experimental_UniformSignalGenerator.waitUntilFinished")
+def _m_Experimental_UniformSignalGenerator_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("Experimental_UniformSignalGenerator.getChannel")
 def _m_Experimental_UniformSignalGenerator_getChannel(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -3375,6 +3525,11 @@ def _m_Experimental_GaussianSignalGenerator_getCaptureDuration(ctx: HandlerConte
 def _m_Experimental_GaussianSignalGenerator_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("Experimental_GaussianSignalGenerator.waitUntilFinished")
+def _m_Experimental_GaussianSignalGenerator_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("Experimental_GaussianSignalGenerator.getChannel")
 def _m_Experimental_GaussianSignalGenerator_getChannel(ctx: HandlerContext, params):
@@ -3421,6 +3576,11 @@ def _m_Experimental_OscillatorSimulation_getConfiguration(ctx: HandlerContext, p
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("Experimental_OscillatorSimulation.waitUntilFinished")
+def _m_Experimental_OscillatorSimulation_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("Experimental_OscillatorSimulation.getChannel")
 def _m_Experimental_OscillatorSimulation_getChannel(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -3465,6 +3625,11 @@ def _m_Experimental_TwoStateExponentialSignalGenerator_getCaptureDuration(ctx: H
 def _m_Experimental_TwoStateExponentialSignalGenerator_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("Experimental_TwoStateExponentialSignalGenerator.waitUntilFinished")
+def _m_Experimental_TwoStateExponentialSignalGenerator_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("Experimental_TwoStateExponentialSignalGenerator.getChannel")
 def _m_Experimental_TwoStateExponentialSignalGenerator_getChannel(ctx: HandlerContext, params):
@@ -3511,6 +3676,11 @@ def _m_Experimental_ExponentialSignalGenerator_getConfiguration(ctx: HandlerCont
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("Experimental_ExponentialSignalGenerator.waitUntilFinished")
+def _m_Experimental_ExponentialSignalGenerator_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("Experimental_ExponentialSignalGenerator.getChannel")
 def _m_Experimental_ExponentialSignalGenerator_getChannel(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -3555,6 +3725,11 @@ def _m_Experimental_GammaSignalGenerator_getCaptureDuration(ctx: HandlerContext,
 def _m_Experimental_GammaSignalGenerator_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("Experimental_GammaSignalGenerator.waitUntilFinished")
+def _m_Experimental_GammaSignalGenerator_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("Experimental_GammaSignalGenerator.getChannel")
 def _m_Experimental_GammaSignalGenerator_getChannel(ctx: HandlerContext, params):
@@ -3601,6 +3776,11 @@ def _m_Experimental_PatternSignalGenerator_getConfiguration(ctx: HandlerContext,
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("Experimental_PatternSignalGenerator.waitUntilFinished")
+def _m_Experimental_PatternSignalGenerator_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("Experimental_PatternSignalGenerator.getChannel")
 def _m_Experimental_PatternSignalGenerator_getChannel(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -3645,6 +3825,11 @@ def _m_Experimental_SimSignalSplitter_getCaptureDuration(ctx: HandlerContext, pa
 def _m_Experimental_SimSignalSplitter_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("Experimental_SimSignalSplitter.waitUntilFinished")
+def _m_Experimental_SimSignalSplitter_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("Experimental_SimSignalSplitter.getChannels")
 def _m_Experimental_SimSignalSplitter_getChannels(ctx: HandlerContext, params):
@@ -3701,6 +3886,11 @@ def _m_Experimental_TransformEfficiency_getConfiguration(ctx: HandlerContext, pa
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("Experimental_TransformEfficiency.waitUntilFinished")
+def _m_Experimental_TransformEfficiency_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("Experimental_TransformEfficiency.getChannel")
 def _m_Experimental_TransformEfficiency_getChannel(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -3745,6 +3935,11 @@ def _m_Experimental_TransformGaussianBroadening_getCaptureDuration(ctx: HandlerC
 def _m_Experimental_TransformGaussianBroadening_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("Experimental_TransformGaussianBroadening.waitUntilFinished")
+def _m_Experimental_TransformGaussianBroadening_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("Experimental_TransformGaussianBroadening.getChannel")
 def _m_Experimental_TransformGaussianBroadening_getChannel(ctx: HandlerContext, params):
@@ -3791,6 +3986,11 @@ def _m_Experimental_TransformDeadtime_getConfiguration(ctx: HandlerContext, para
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("Experimental_TransformDeadtime.waitUntilFinished")
+def _m_Experimental_TransformDeadtime_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("Experimental_TransformDeadtime.getChannel")
 def _m_Experimental_TransformDeadtime_getChannel(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -3835,6 +4035,11 @@ def _m_Experimental_TransformCrosstalk_getCaptureDuration(ctx: HandlerContext, p
 def _m_Experimental_TransformCrosstalk_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("Experimental_TransformCrosstalk.waitUntilFinished")
+def _m_Experimental_TransformCrosstalk_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("Experimental_TransformCrosstalk.getChannel")
 def _m_Experimental_TransformCrosstalk_getChannel(ctx: HandlerContext, params):
@@ -3885,6 +4090,11 @@ def _m_Experimental_SimLifetime_getCaptureDuration(ctx: HandlerContext, params):
 def _m_Experimental_SimLifetime_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("Experimental_SimLifetime.waitUntilFinished")
+def _m_Experimental_SimLifetime_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("Experimental_SimLifetime.getChannel")
 def _m_Experimental_SimLifetime_getChannel(ctx: HandlerContext, params):
@@ -3940,6 +4150,11 @@ def _m_StartStop_getCaptureDuration(ctx: HandlerContext, params):
 def _m_StartStop_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("StartStop.waitUntilFinished")
+def _m_StartStop_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("StartStop.getData")
 def _m_StartStop_getData(ctx: HandlerContext, params):
@@ -4032,6 +4247,11 @@ def _m_SyntheticSingleTag_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("SyntheticSingleTag.waitUntilFinished")
+def _m_SyntheticSingleTag_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("SyntheticSingleTag.trigger")
 def _m_SyntheticSingleTag_trigger(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -4081,6 +4301,11 @@ def _m_TimeDifferences_getCaptureDuration(ctx: HandlerContext, params):
 def _m_TimeDifferences_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("TimeDifferences.waitUntilFinished")
+def _m_TimeDifferences_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("TimeDifferences.getData")
 def _m_TimeDifferences_getData(ctx: HandlerContext, params):
@@ -4157,6 +4382,11 @@ def _m_Histogram_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
 
+@handler("Histogram.waitUntilFinished")
+def _m_Histogram_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
+
 @handler("Histogram.getData")
 def _m_Histogram_getData(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
@@ -4206,6 +4436,11 @@ def _m_TimeDifferencesND_getCaptureDuration(ctx: HandlerContext, params):
 def _m_TimeDifferencesND_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("TimeDifferencesND.waitUntilFinished")
+def _m_TimeDifferencesND_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("TimeDifferencesND.getData")
 def _m_TimeDifferencesND_getData(ctx: HandlerContext, params):
@@ -4271,6 +4506,11 @@ def _m_TimeTagStream_getCaptureDuration(ctx: HandlerContext, params):
 def _m_TimeTagStream_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("TimeTagStream.waitUntilFinished")
+def _m_TimeTagStream_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("TimeTagStream.getData")
 def _m_TimeTagStream_getData(ctx: HandlerContext, params):
@@ -4372,6 +4612,11 @@ def _m_TriggerOnCountrate_getCaptureDuration(ctx: HandlerContext, params):
 def _m_TriggerOnCountrate_getConfiguration(ctx: HandlerContext, params):
     obj = _lookup(ctx.registry, params[0])
     return obj.getConfiguration()
+
+@handler("TriggerOnCountrate.waitUntilFinished")
+def _m_TriggerOnCountrate_waitUntilFinished(ctx: HandlerContext, params):
+    obj = _lookup(ctx.registry, params[0])
+    return obj.waitUntilFinished(params[1])
 
 @handler("TriggerOnCountrate.getChannelAbove")
 def _m_TriggerOnCountrate_getChannelAbove(ctx: HandlerContext, params):

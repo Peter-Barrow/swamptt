@@ -46,7 +46,6 @@
     "*":               ["__init__", "__del__", "__enter__", "__exit__",
                         "__disown__", "__swig_destroy__",
                         "thisown", "this"],
-    "IteratorBase":    ["waitUntilFinished"],
     "TimeTagger":      ["factoryAccess"]
   },
 

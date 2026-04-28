@@ -695,6 +695,9 @@ class Coincidences:
     def getConfiguration(self):
         return self._rpc.request('Coincidences.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Coincidences.waitUntilFinished', [self._handle, timeout])
+
     def getChannels(self):
         return self._rpc.request('Coincidences.getChannels', [self._handle])
 
@@ -747,6 +750,9 @@ class Combinations:
     def getConfiguration(self):
         return self._rpc.request('Combinations.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Combinations.waitUntilFinished', [self._handle, timeout])
+
     def getChannel(self, input_channels):
         return self._rpc.request('Combinations.getChannel', [self._handle, input_channels])
 
@@ -795,6 +801,9 @@ class Combiner:
     def getConfiguration(self):
         return self._rpc.request('Combiner.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Combiner.waitUntilFinished', [self._handle, timeout])
+
     def getChannelCounts(self):
         return _unpack_ndarray(self._rpc.request('Combiner.getChannelCounts', [self._handle]))
 
@@ -838,6 +847,9 @@ class ConditionalFilterChannel:
     def getConfiguration(self):
         return self._rpc.request('ConditionalFilterChannel.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('ConditionalFilterChannel.waitUntilFinished', [self._handle, timeout])
+
     def getChannel(self):
         return self._rpc.request('ConditionalFilterChannel.getChannel', [self._handle])
 
@@ -877,6 +889,9 @@ class ConstantFractionDiscriminator:
     def getConfiguration(self):
         return self._rpc.request('ConstantFractionDiscriminator.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('ConstantFractionDiscriminator.waitUntilFinished', [self._handle, timeout])
+
     def getChannels(self):
         return self._rpc.request('ConstantFractionDiscriminator.getChannels', [self._handle])
 
@@ -913,6 +928,9 @@ class Correlation:
 
     def getConfiguration(self):
         return self._rpc.request('Correlation.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Correlation.waitUntilFinished', [self._handle, timeout])
 
     def getData(self):
         return _unpack_ndarray(self._rpc.request('Correlation.getData', [self._handle]))
@@ -978,6 +996,9 @@ class CorrelationPairs:
     def getConfiguration(self):
         return self._rpc.request('CorrelationPairs.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('CorrelationPairs.waitUntilFinished', [self._handle, timeout])
+
     def getDataObject(self) -> CorrelationPairsData:
         handle = self._rpc.request('CorrelationPairs.getDataObject', [self._handle])
         return CorrelationPairsData(handle)
@@ -1018,6 +1039,9 @@ class CountBetweenMarkers:
 
     def getConfiguration(self):
         return self._rpc.request('CountBetweenMarkers.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('CountBetweenMarkers.waitUntilFinished', [self._handle, timeout])
 
     def getData(self):
         return _unpack_ndarray(self._rpc.request('CountBetweenMarkers.getData', [self._handle]))
@@ -1110,6 +1134,9 @@ class Counter:
     def getConfiguration(self):
         return self._rpc.request('Counter.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Counter.waitUntilFinished', [self._handle, timeout])
+
     def getData(self, rolling=True):
         return _unpack_ndarray(self._rpc.request('Counter.getData', [self._handle, rolling]))
 
@@ -1159,6 +1186,9 @@ class Countrate:
     def getConfiguration(self):
         return self._rpc.request('Countrate.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Countrate.waitUntilFinished', [self._handle, timeout])
+
     def getData(self):
         return _unpack_ndarray(self._rpc.request('Countrate.getData', [self._handle]))
 
@@ -1197,6 +1227,9 @@ class DelayedChannels:
 
     def getConfiguration(self):
         return self._rpc.request('DelayedChannels.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('DelayedChannels.waitUntilFinished', [self._handle, timeout])
 
     def getChannels(self):
         return self._rpc.request('DelayedChannels.getChannels', [self._handle])
@@ -1250,6 +1283,9 @@ class Dump:
     def getConfiguration(self):
         return self._rpc.request('Dump.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Dump.waitUntilFinished', [self._handle, timeout])
+
 
 @remote
 class EventGenerator:
@@ -1283,6 +1319,9 @@ class EventGenerator:
 
     def getConfiguration(self):
         return self._rpc.request('EventGenerator.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('EventGenerator.waitUntilFinished', [self._handle, timeout])
 
     def getChannel(self):
         return self._rpc.request('EventGenerator.getChannel', [self._handle])
@@ -1345,6 +1384,9 @@ class FileWriter:
 
     def getConfiguration(self):
         return self._rpc.request('FileWriter.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('FileWriter.waitUntilFinished', [self._handle, timeout])
 
     def split(self, *args):
         self._rpc.request('FileWriter.split', [self._handle, *args])
@@ -1449,6 +1491,9 @@ class Flim:
 
     def getConfiguration(self):
         return self._rpc.request('Flim.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Flim.waitUntilFinished', [self._handle, timeout])
 
     def isAcquiring(self):
         return self._rpc.request('Flim.isAcquiring', [self._handle])
@@ -1583,6 +1628,9 @@ class FrequencyCounter:
     def getConfiguration(self):
         return self._rpc.request('FrequencyCounter.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('FrequencyCounter.waitUntilFinished', [self._handle, timeout])
+
     def getDataObject(self, event_divider=1, remove=False, channels_last_dim=False) -> FrequencyCounterData:
         handle = self._rpc.request('FrequencyCounter.getDataObject', [self._handle, event_divider, remove, channels_last_dim])
         return FrequencyCounterData(handle)
@@ -1619,6 +1667,9 @@ class FrequencyMultiplier:
 
     def getConfiguration(self):
         return self._rpc.request('FrequencyMultiplier.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('FrequencyMultiplier.waitUntilFinished', [self._handle, timeout])
 
     def getChannel(self):
         return self._rpc.request('FrequencyMultiplier.getChannel', [self._handle])
@@ -1708,6 +1759,9 @@ class FrequencyStability:
     def getConfiguration(self):
         return self._rpc.request('FrequencyStability.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('FrequencyStability.waitUntilFinished', [self._handle, timeout])
+
     def getDataObject(self) -> FrequencyStabilityData:
         handle = self._rpc.request('FrequencyStability.getDataObject', [self._handle])
         return FrequencyStabilityData(handle)
@@ -1745,6 +1799,9 @@ class GatedChannel:
 
     def getConfiguration(self):
         return self._rpc.request('GatedChannel.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('GatedChannel.waitUntilFinished', [self._handle, timeout])
 
     def getChannel(self):
         return self._rpc.request('GatedChannel.getChannel', [self._handle])
@@ -1810,6 +1867,9 @@ class HistogramLogBins:
     def getConfiguration(self):
         return self._rpc.request('HistogramLogBins.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('HistogramLogBins.waitUntilFinished', [self._handle, timeout])
+
     def getDataObject(self) -> HistogramLogBinsData:
         handle = self._rpc.request('HistogramLogBins.getDataObject', [self._handle])
         return HistogramLogBinsData(handle)
@@ -1859,6 +1919,9 @@ class Histogram2D:
     def getConfiguration(self):
         return self._rpc.request('Histogram2D.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Histogram2D.waitUntilFinished', [self._handle, timeout])
+
     def getData(self):
         return _unpack_ndarray(self._rpc.request('Histogram2D.getData', [self._handle]))
 
@@ -1904,6 +1967,9 @@ class HistogramND:
     def getConfiguration(self):
         return self._rpc.request('HistogramND.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('HistogramND.waitUntilFinished', [self._handle, timeout])
+
     def getData(self):
         return _unpack_ndarray(self._rpc.request('HistogramND.getData', [self._handle]))
 
@@ -1944,6 +2010,9 @@ class Experimental_MarkovProcessGenerator:
     def getConfiguration(self):
         return self._rpc.request('Experimental_MarkovProcessGenerator.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Experimental_MarkovProcessGenerator.waitUntilFinished', [self._handle, timeout])
+
     def getChannel(self):
         return self._rpc.request('Experimental_MarkovProcessGenerator.getChannel', [self._handle])
 
@@ -1982,6 +2051,9 @@ class OverflowInjector:
 
     def getConfiguration(self):
         return self._rpc.request('OverflowInjector.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('OverflowInjector.waitUntilFinished', [self._handle, timeout])
 
 
 @remote
@@ -2044,6 +2116,9 @@ class PhaseNoise:
     def getConfiguration(self):
         return self._rpc.request('PhaseNoise.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('PhaseNoise.waitUntilFinished', [self._handle, timeout])
+
     def getDataObject(self) -> PhaseNoiseData:
         handle = self._rpc.request('PhaseNoise.getDataObject', [self._handle])
         return PhaseNoiseData(handle)
@@ -2080,6 +2155,9 @@ class Experimental_PhotonNumber:
 
     def getConfiguration(self):
         return self._rpc.request('Experimental_PhotonNumber.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Experimental_PhotonNumber.waitUntilFinished', [self._handle, timeout])
 
     def getChannels(self):
         return self._rpc.request('Experimental_PhotonNumber.getChannels', [self._handle])
@@ -2152,6 +2230,9 @@ class Experimental_PulsePerSecondMonitor:
     def getConfiguration(self):
         return self._rpc.request('Experimental_PulsePerSecondMonitor.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Experimental_PulsePerSecondMonitor.waitUntilFinished', [self._handle, timeout])
+
     def getDataObject(self, remove=False) -> Experimental_PulsePerSecondData:
         handle = self._rpc.request('Experimental_PulsePerSecondMonitor.getDataObject', [self._handle, remove])
         return Experimental_PulsePerSecondData(handle)
@@ -2188,6 +2269,9 @@ class Sampler:
 
     def getConfiguration(self):
         return self._rpc.request('Sampler.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Sampler.waitUntilFinished', [self._handle, timeout])
 
     def getData(self):
         return _unpack_ndarray(self._rpc.request('Sampler.getData', [self._handle]))
@@ -2227,6 +2311,9 @@ class Scope:
 
     def getConfiguration(self):
         return self._rpc.request('Scope.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Scope.waitUntilFinished', [self._handle, timeout])
 
     def getData(self):
         return self._rpc.request('Scope.getData', [self._handle])
@@ -2274,6 +2361,9 @@ class Experimental_UniformSignalGenerator:
     def getConfiguration(self):
         return self._rpc.request('Experimental_UniformSignalGenerator.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Experimental_UniformSignalGenerator.waitUntilFinished', [self._handle, timeout])
+
     def getChannel(self):
         return self._rpc.request('Experimental_UniformSignalGenerator.getChannel', [self._handle])
 
@@ -2310,6 +2400,9 @@ class Experimental_GaussianSignalGenerator:
 
     def getConfiguration(self):
         return self._rpc.request('Experimental_GaussianSignalGenerator.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Experimental_GaussianSignalGenerator.waitUntilFinished', [self._handle, timeout])
 
     def getChannel(self):
         return self._rpc.request('Experimental_GaussianSignalGenerator.getChannel', [self._handle])
@@ -2348,6 +2441,9 @@ class Experimental_OscillatorSimulation:
     def getConfiguration(self):
         return self._rpc.request('Experimental_OscillatorSimulation.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Experimental_OscillatorSimulation.waitUntilFinished', [self._handle, timeout])
+
     def getChannel(self):
         return self._rpc.request('Experimental_OscillatorSimulation.getChannel', [self._handle])
 
@@ -2384,6 +2480,9 @@ class Experimental_TwoStateExponentialSignalGenerator:
 
     def getConfiguration(self):
         return self._rpc.request('Experimental_TwoStateExponentialSignalGenerator.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Experimental_TwoStateExponentialSignalGenerator.waitUntilFinished', [self._handle, timeout])
 
     def getChannel(self):
         return self._rpc.request('Experimental_TwoStateExponentialSignalGenerator.getChannel', [self._handle])
@@ -2422,6 +2521,9 @@ class Experimental_ExponentialSignalGenerator:
     def getConfiguration(self):
         return self._rpc.request('Experimental_ExponentialSignalGenerator.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Experimental_ExponentialSignalGenerator.waitUntilFinished', [self._handle, timeout])
+
     def getChannel(self):
         return self._rpc.request('Experimental_ExponentialSignalGenerator.getChannel', [self._handle])
 
@@ -2458,6 +2560,9 @@ class Experimental_GammaSignalGenerator:
 
     def getConfiguration(self):
         return self._rpc.request('Experimental_GammaSignalGenerator.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Experimental_GammaSignalGenerator.waitUntilFinished', [self._handle, timeout])
 
     def getChannel(self):
         return self._rpc.request('Experimental_GammaSignalGenerator.getChannel', [self._handle])
@@ -2496,6 +2601,9 @@ class Experimental_PatternSignalGenerator:
     def getConfiguration(self):
         return self._rpc.request('Experimental_PatternSignalGenerator.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Experimental_PatternSignalGenerator.waitUntilFinished', [self._handle, timeout])
+
     def getChannel(self):
         return self._rpc.request('Experimental_PatternSignalGenerator.getChannel', [self._handle])
 
@@ -2531,6 +2639,9 @@ class Experimental_SimSignalSplitter:
 
     def getConfiguration(self):
         return self._rpc.request('Experimental_SimSignalSplitter.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Experimental_SimSignalSplitter.waitUntilFinished', [self._handle, timeout])
 
     def getChannels(self):
         return self._rpc.request('Experimental_SimSignalSplitter.getChannels', [self._handle])
@@ -2574,6 +2685,9 @@ class Experimental_TransformEfficiency:
     def getConfiguration(self):
         return self._rpc.request('Experimental_TransformEfficiency.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Experimental_TransformEfficiency.waitUntilFinished', [self._handle, timeout])
+
     def getChannel(self):
         return self._rpc.request('Experimental_TransformEfficiency.getChannel', [self._handle])
 
@@ -2609,6 +2723,9 @@ class Experimental_TransformGaussianBroadening:
 
     def getConfiguration(self):
         return self._rpc.request('Experimental_TransformGaussianBroadening.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Experimental_TransformGaussianBroadening.waitUntilFinished', [self._handle, timeout])
 
     def getChannel(self):
         return self._rpc.request('Experimental_TransformGaussianBroadening.getChannel', [self._handle])
@@ -2646,6 +2763,9 @@ class Experimental_TransformDeadtime:
     def getConfiguration(self):
         return self._rpc.request('Experimental_TransformDeadtime.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Experimental_TransformDeadtime.waitUntilFinished', [self._handle, timeout])
+
     def getChannel(self):
         return self._rpc.request('Experimental_TransformDeadtime.getChannel', [self._handle])
 
@@ -2681,6 +2801,9 @@ class Experimental_TransformCrosstalk:
 
     def getConfiguration(self):
         return self._rpc.request('Experimental_TransformCrosstalk.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Experimental_TransformCrosstalk.waitUntilFinished', [self._handle, timeout])
 
     def getChannel(self):
         return self._rpc.request('Experimental_TransformCrosstalk.getChannel', [self._handle])
@@ -2730,6 +2853,9 @@ class Experimental_SimLifetime:
     def getConfiguration(self):
         return self._rpc.request('Experimental_SimLifetime.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Experimental_SimLifetime.waitUntilFinished', [self._handle, timeout])
+
     def getChannel(self):
         return self._rpc.request('Experimental_SimLifetime.getChannel', [self._handle])
 
@@ -2772,6 +2898,9 @@ class StartStop:
 
     def getConfiguration(self):
         return self._rpc.request('StartStop.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('StartStop.waitUntilFinished', [self._handle, timeout])
 
     def getData(self):
         return _unpack_ndarray(self._rpc.request('StartStop.getData', [self._handle]))
@@ -2847,6 +2976,9 @@ class SyntheticSingleTag:
     def getConfiguration(self):
         return self._rpc.request('SyntheticSingleTag.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('SyntheticSingleTag.waitUntilFinished', [self._handle, timeout])
+
     def trigger(self):
         self._rpc.request('SyntheticSingleTag.trigger', [self._handle])
 
@@ -2886,6 +3018,9 @@ class TimeDifferences:
 
     def getConfiguration(self):
         return self._rpc.request('TimeDifferences.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('TimeDifferences.waitUntilFinished', [self._handle, timeout])
 
     def getData(self):
         return _unpack_ndarray(self._rpc.request('TimeDifferences.getData', [self._handle]))
@@ -2942,6 +3077,9 @@ class Histogram:
     def getConfiguration(self):
         return self._rpc.request('Histogram.getConfiguration', [self._handle])
 
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('Histogram.waitUntilFinished', [self._handle, timeout])
+
     def getData(self):
         return _unpack_ndarray(self._rpc.request('Histogram.getData', [self._handle]))
 
@@ -2980,6 +3118,9 @@ class TimeDifferencesND:
 
     def getConfiguration(self):
         return self._rpc.request('TimeDifferencesND.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('TimeDifferencesND.waitUntilFinished', [self._handle, timeout])
 
     def getData(self):
         return _unpack_ndarray(self._rpc.request('TimeDifferencesND.getData', [self._handle]))
@@ -3028,6 +3169,9 @@ class TimeTagStream:
 
     def getConfiguration(self):
         return self._rpc.request('TimeTagStream.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('TimeTagStream.waitUntilFinished', [self._handle, timeout])
 
     def getData(self) -> TimeTagStreamBuffer:
         handle = self._rpc.request('TimeTagStream.getData', [self._handle])
@@ -3108,6 +3252,9 @@ class TriggerOnCountrate:
 
     def getConfiguration(self):
         return self._rpc.request('TriggerOnCountrate.getConfiguration', [self._handle])
+
+    def waitUntilFinished(self, timeout=-1):
+        self._rpc.request('TriggerOnCountrate.waitUntilFinished', [self._handle, timeout])
 
     def getChannelAbove(self):
         return self._rpc.request('TriggerOnCountrate.getChannelAbove', [self._handle])
